@@ -1,50 +1,50 @@
-# 📚 Corrige Tes Cours
+# 📚 Ebook Cameroun
 
-🎓 _La plateforme qui simplifie ta révision et booste ta réussite._
+🎓 _La bibliothèque numérique qui facilite l’accès à tous tes ebooks et ressources universitaires._
 
 ---
 
 ## ✨ Fonctionnalités déjà disponibles
 
-Voici les fonctionnalités actuellement disponibles sur **Corrige Tes Cours** :
+Voici ce que propose **Ebook Cameroun** pour l’instant :
 
-### 📝 Prise de notes interactive
-Organise tes idées, cours ou rappels directement depuis l'interface. Ton carnet de notes personnel est accessible à tout moment.
+### 📚 Catalogue complet
+Retrouve facilement tous tes ebooks universitaires, classés par filière et niveau.
 
-### 📄 Résumés de cours
-Accède à des résumés clairs et concis pour mieux comprendre les notions essentielles. Parfait pour réviser rapidement avant un examen.
+### 🔍 Recherche rapide
+Trouve en un instant les livres dont tu as besoin grâce à une recherche performante.
 
-### ❓ Quiz d'entraînement
-Teste tes connaissances avec des quiz intelligents basés sur les cours. Chaque quiz t’aide à identifier tes points faibles.
+### 📝 Témoignages utilisateurs
+Découvre ce que pensent nos utilisateurs et comment Ebook Cameroun les aide dans leurs études.
 
-### 📈 Suivi de performance
-Visualise ta progression grâce à des graphiques simples et efficaces. Reste motivé(e) en suivant ton évolution au fil du temps.
-
----
-
-## 🚀 En cours de développement...
-
-- 🔐 Espace personnel connecté
-- 💾 Sauvegarde cloud
-- 🧠 Intelligence adaptative
-- 💬 Forum d'entraide
+### 🚀 Essai gratuit
+Teste la plateforme gratuitement pendant 14 jours, sans engagement.
 
 ---
 
-## 🛠️ Stack utilisée (projet complet)
+## 🚧 Fonctionnalités en développement
 
-- **Front-end** : React / Next.js
-- **Base de données** : à venir (Firestore / Supabase ?)
-- **UI Design** : Tailwind CSS + Remix Icon
-
----
-
-## 🤝 Contribuer
-
-Tu veux aider ? 🚀 Clone le repo, propose des idées, ouvre une issue ou un pull request !  
-Chaque contribution compte 💙
+- 🔐 Espace personnel sécurisé  
+- 💾 Sauvegarde et synchronisation cloud  
+- 🧠 Suggestions personnalisées via IA  
+- 💬 Forum communautaire d’entraide et échanges
 
 ---
 
+## 🛠️ Stack technique
 
-**🧠 Corrige Tes Cours — parce que bien réviser, c’est bien réussir.**
+- **Front-end** : React / Next.js  
+- **Style** : Tailwind CSS + Remix Icon  
+- **Back-end & BDD** : en cours de choix (Firestore, Supabase, etc.)  
+
+---
+
+## 🤝 Contribution
+
+Tu souhaites participer à l’aventure Ebook Cameroun ?  
+N’hésite pas à cloner ce repo, proposer des idées, ouvrir des issues ou faire des pull requests.  
+Chaque aide est la bienvenue ! 💙
+
+---
+
+**🧠 Ebook Cameroun — la réussite commence par une bonne lecture.**
