@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📚 Corrige Tes Cours
 
-## Getting Started
+🎓 _La plateforme qui simplifie ta révision et booste ta réussite._
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Fonctionnalités déjà disponibles
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Voici les fonctionnalités actuellement disponibles sur **Corrige Tes Cours** :
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 📝 Prise de notes interactive
+Organise tes idées, cours ou rappels directement depuis l'interface. Ton carnet de notes personnel est accessible à tout moment.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 📄 Résumés de cours
+Accède à des résumés clairs et concis pour mieux comprendre les notions essentielles. Parfait pour réviser rapidement avant un examen.
 
-## Learn More
+### ❓ Quiz d'entraînement
+Teste tes connaissances avec des quiz intelligents basés sur les cours. Chaque quiz t’aide à identifier tes points faibles.
 
-To learn more about Next.js, take a look at the following resources:
+### 📈 Suivi de performance
+Visualise ta progression grâce à des graphiques simples et efficaces. Reste motivé(e) en suivant ton évolution au fil du temps.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🚀 En cours de développement...
 
-## Deploy on Vercel
+- 🔐 Espace personnel connecté
+- 💾 Sauvegarde cloud
+- 🧠 Intelligence adaptative
+- 💬 Forum d'entraide
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🛠️ Stack utilisée (projet complet)
+
+- **Front-end** : React / Next.js
+- **Base de données** : à venir (Firestore / Supabase ?)
+- **UI Design** : Tailwind CSS + Remix Icon
+
+---
+
+## 🤝 Contribuer
+
+Tu veux aider ? 🚀 Clone le repo, propose des idées, ouvre une issue ou un pull request !  
+Chaque contribution compte 💙
+
+---
+
+
+**🧠 Corrige Tes Cours — parce que bien réviser, c’est bien réussir.**
