@@ -53,7 +53,7 @@ export default function Testimonial() {
                 className="text-orange-400 text-3xl mb-4"
               />
               <p className="text-orange-800 text-lg italic mb-6 flex-grow">
-                "{quote}"
+                {quote}
               </p>
               <div className="flex items-center mt-auto">
                 <Image

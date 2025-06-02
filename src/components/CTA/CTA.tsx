@@ -46,7 +46,7 @@ export default function Cta() {
                 href="#"
                 className="text-orange-600 font-medium hover:text-orange-500"
               >
-                Conditions d'utilisation
+                Conditions d utilisation
               </Link>{" "}
               et notre{" "}
               <Link
