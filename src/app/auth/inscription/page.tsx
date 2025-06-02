@@ -144,103 +144,109 @@ export default function RegisterPage() {
             </span>
           </div>
 
-          <form onSubmit={handleRegister} className="space-y-5">
-            {error && (
-              <p className="text-red-600 text-center text-sm font-medium">
-                {error}
-              </p>
-            )}
-            {successMsg && (
-              <p className="text-green-600 text-center text-sm font-medium">
-                {successMsg}
-              </p>
-            )}
+         <form onSubmit={handleRegister} className="space-y-5">
+  {error && (
+    <p className="text-red-600 text-center text-sm font-medium">
+      {error}
+    </p>
+  )}
+  {successMsg && (
+    <p className="text-green-600 text-center text-sm font-medium">
+      {successMsg}
+    </p>
+  )}
 
-            <div>
-              <label
-                htmlFor="fullName"
-                className="block text-sm font-semibold text-gray-700 mb-1"
-              >
-                Nom complet
-              </label>
-              <input
-                id="fullName"
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="Jean Dupont"
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
-              />
-            </div>
+  <div>
+    <label
+      htmlFor="fullName"
+      className="block text-sm font-semibold text-gray-700 mb-1"
+    >
+      Nom complet
+    </label>
+    <input
+      id="fullName"
+      type="text"
+      value={fullName}
+      onChange={(e) => setFullName(e.target.value)}
+      placeholder="Jean Dupont"
+      required
+      className="w-full px-4 py-3 border border-gray-300 rounded-md
+                 focus:outline-none focus:ring-2 focus:ring-orange-500
+                 transition text-black"
+    />
+  </div>
 
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-semibold text-gray-700 mb-1"
-              >
-                Adresse email
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="exemple@domaine.com"
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
-              />
-            </div>
+  <div>
+    <label
+      htmlFor="email"
+      className="block text-sm font-semibold text-gray-700 mb-1"
+    >
+      Adresse email
+    </label>
+    <input
+      id="email"
+      type="email"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      placeholder="exemple@domaine.com"
+      required
+      className="w-full px-4 py-3 border border-gray-300 rounded-md
+                 focus:outline-none focus:ring-2 focus:ring-orange-500
+                 transition text-black"
+    />
+  </div>
 
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-semibold text-gray-700 mb-1"
-              >
-                Mot de passe
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
-              />
-              <p className="mt-1 text-xs text-gray-500">
-                Minimum 8 caractères, avec au moins une majuscule et un chiffre
-              </p>
-            </div>
+  <div>
+    <label
+      htmlFor="password"
+      className="block text-sm font-semibold text-gray-700 mb-1"
+    >
+      Mot de passe
+    </label>
+    <input
+      id="password"
+      type="password"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      placeholder="••••••••"
+      required
+      className="w-full px-4 py-3 border border-gray-300 rounded-md
+                 focus:outline-none focus:ring-2 focus:ring-orange-500
+                 transition text-black"
+    />
+    <p className="mt-1 text-xs text-gray-500">
+      Minimum 8 caractères, avec au moins une majuscule et un chiffre
+    </p>
+  </div>
 
-            <div className="flex items-center">
-              <input
-                id="terms"
-                type="checkbox"
-                checked={termsAccepted}
-                onChange={(e) => setTermsAccepted(e.target.checked)}
-                className="h-5 w-5 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
-                required
-              />
-              <label htmlFor="terms" className="ml-3 text-sm text-gray-700">
-                J’accepte les{" "}
-                <Link
-                  href="/conditions"
-                  className="text-orange-600 hover:underline font-medium"
-                >
-                  conditions d’utilisation
-                </Link>
-              </label>
-            </div>
+  <div className="flex items-center">
+    <input
+      id="terms"
+      type="checkbox"
+      checked={termsAccepted}
+      onChange={(e) => setTermsAccepted(e.target.checked)}
+      className="h-5 w-5 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+      required
+    />
+    <label htmlFor="terms" className="ml-3 text-sm text-gray-700">
+      J’accepte les{" "}
+      <Link
+        href="/conditions"
+        className="text-orange-600 hover:underline font-medium"
+      >
+        conditions d’utilisation
+      </Link>
+    </label>
+  </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-orange-600 text-white py-3 rounded-md font-semibold hover:bg-orange-700 transition-colors disabled:opacity-50"
-            >
-              {loading ? "Inscription en cours..." : "S’inscrire gratuitement"}
-            </button>
-          </form>
+  <button
+    type="submit"
+    disabled={loading}
+    className="w-full bg-orange-600 text-white py-3 rounded-md font-semibold hover:bg-orange-700 transition-colors disabled:opacity-50"
+  >
+    {loading ? "Inscription en cours..." : "S’inscrire gratuitement"}
+  </button>
+</form>
         </div>
       </div>
     </div>
