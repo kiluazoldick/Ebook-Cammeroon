@@ -118,64 +118,64 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-5">
-            {error && <p className="text-red-600 text-sm">{error}</p>}
+         <form onSubmit={handleLogin} className="space-y-5">
+  {error && <p className="text-red-600 text-sm">{error}</p>}
 
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg
-                         focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                placeholder="votre@email.com"
-                required
-              />
-            </div>
+  <div>
+    <label
+      htmlFor="email"
+      className="block text-sm font-medium text-gray-700 mb-1"
+    >
+      Email
+    </label>
+    <input
+      id="email"
+      type="email"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      className="w-full px-4 py-3 border border-gray-300 rounded-lg
+                 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-black"
+      placeholder="votre@email.com"
+      required
+    />
+  </div>
 
-            <div>
-              <div className="flex justify-between items-center mb-1">
-                <label
-                  htmlFor="password"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Mot de passe
-                </label>
-                <Link
-                  href="/auth/mot-de-passe-oublie"
-                  className="text-orange-600 text-sm hover:underline"
-                >
-                  Mot de passe oublié ?
-                </Link>
-              </div>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg
-                         focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                placeholder="••••••••"
-                required
-              />
-            </div>
+  <div>
+    <div className="flex justify-between items-center mb-1">
+      <label
+        htmlFor="password"
+        className="text-sm font-medium text-gray-700"
+      >
+        Mot de passe
+      </label>
+      <Link
+        href="/auth/mot-de-passe-oublie"
+        className="text-orange-600 text-sm hover:underline"
+      >
+        Mot de passe oublié ?
+      </Link>
+    </div>
+    <input
+      id="password"
+      type="password"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      className="w-full px-4 py-3 border border-gray-300 rounded-lg
+                 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-black"
+      placeholder="••••••••"
+      required
+    />
+  </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-orange-600 text-white py-3.5 px-6 rounded-xl
-                       font-medium hover:bg-orange-700 transition-colors"
-            >
-              {loading ? "Connexion..." : "Se connecter"}
-            </button>
-          </form>
+  <button
+    type="submit"
+    disabled={loading}
+    className="w-full bg-orange-600 text-white py-3.5 px-6 rounded-xl
+             font-medium hover:bg-orange-700 transition-colors"
+  >
+    {loading ? "Connexion..." : "Se connecter"}
+  </button>
+</form>
         </div>
       </div>
     </div>
