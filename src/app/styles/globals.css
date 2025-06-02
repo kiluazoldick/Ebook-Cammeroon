@@ -44,3 +44,21 @@
     transform: translateY(-10px);
   }
 }
+
+.auth-container {
+  display: flex;
+  height: 100vh;
+}
+
+.auth-sidebar {
+  flex: 1;
+  background-color: #f3f4f6;
+  padding: 2rem;
+}
+
+.auth-form {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

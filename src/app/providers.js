@@ -1,9 +1,8 @@
 // app/providers.js
 "use client";
 
-import { config } from "@fortawesome/fontawesome-svg-core";
+import { config, library } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
-import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faFileUpload,
   faScroll,
@@ -46,6 +45,12 @@ library.add(
   faLinkedinIn
 );
 
+import PropTypes from "prop-types";
+
 export function Providers({ children }) {
   return <>{children}</>;
 }
+
+Providers.propTypes = {
+  children: PropTypes.node,
+};
