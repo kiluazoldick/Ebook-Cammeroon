@@ -41,7 +41,7 @@ export default function Hero() {
           <div className="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:flex lg:items-center justify-center">
             <div className="relative w-full max-w-md rounded-lg shadow-lg overflow-hidden">
               <Image
-                src="/images/ebook-hero-visuel.png"
+                src="/images/ebookcameroonvisuel.jpg"
                 alt="Capture d'écran de la plateforme"
                 width={1920}
                 height={720}
