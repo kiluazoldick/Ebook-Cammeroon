@@ -5,7 +5,7 @@ import { faUser, faFire, faStar } from "@fortawesome/free-solid-svg-icons";
 
 export default function DashboardPage() {
   return (
-    <div className="min-h-screen bg-white text-gray-800 px-4 py-6 md:px-12">
+    <div className="min-h-screen bg-white  text-gray-800 px-4 py-6 md:px-12">
       {/* Header simple */}
       <header className="mb-10 text-center">
         <h1 className="text-3xl font-bold text-orange-600 mb-2">
@@ -31,7 +31,7 @@ export default function DashboardPage() {
             Les histoires les plus lues par la communauté.
           </p>
           <Link
-            href="#"
+            href="/dashboard/populaires"
             className="text-orange-600 mt-3 inline-block text-sm font-medium hover:underline"
           >
             Explorer
@@ -51,7 +51,7 @@ export default function DashboardPage() {
             Basé sur vos lectures et préférences.
           </p>
           <Link
-            href="#"
+            href="/dashboard/recommandations"
             className="text-orange-600 mt-3 inline-block text-sm font-medium hover:underline"
           >
             Voir les suggestions
@@ -71,7 +71,7 @@ export default function DashboardPage() {
             Les plumes à ne pas manquer au Cameroun.
           </p>
           <Link
-            href="#"
+            href="/dashboard/auteurs"
             className="text-orange-600 mt-3 inline-block text-sm font-medium hover:underline"
           >
             Découvrir
@@ -87,7 +87,7 @@ export default function DashboardPage() {
         <p className="mb-4 text-sm">
           Des centaines de livres et d’histoires africaines vous attendent
         </p>
-        <Link href="#">
+        <Link href="/dashboard/populaires">
           <button className="bg-white text-orange-600 font-medium px-6 py-2 rounded-full shadow hover:scale-105 transition">
             Commencer à lire
           </button>
