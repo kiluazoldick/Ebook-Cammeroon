@@ -1,5 +1,6 @@
 // app/components/Pricing.tsx
 import React from "react";
+import Link from "next/link";
 
 const pricingPlans = [
   {
@@ -103,15 +104,17 @@ export default function Pricing() {
                   </li>
                 ))}
               </ul>
-              <button
-                className={`mt-8 w-full py-3 rounded-md font-medium text-white transition-colors ${
-                  plan.popular
-                    ? "bg-orange-600 hover:bg-orange-700"
-                    : "bg-orange-500 hover:bg-orange-600"
-                }`}
-              >
-                {plan.price === "0" ? "Commencer" : "S'abonner"}
-              </button>
+              <Link href="auth/connexion">
+                <button
+                  className={`mt-8 w-full py-3 rounded-md font-medium text-white transition-colors ${
+                    plan.popular
+                      ? "bg-orange-600 hover:bg-orange-700"
+                      : "bg-orange-500 hover:bg-orange-600"
+                  }`}
+                >
+                  {plan.price === "0" ? "Commencer" : "S'abonner"}
+                </button>
+              </Link>
             </div>
           ))}
         </div>

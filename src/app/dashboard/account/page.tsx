@@ -1,62 +1,88 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import Image from "next/image";
+import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "@/lib/database.types";
+import toast, { Toaster } from "react-hot-toast";
 
-// Définition du type user incluant les champs personnalisés
 type UserProfile = {
   id: string;
   email: string | null;
   full_name?: string | null;
-  avatar_url?: string | null;
 };
 
 export default function ComptePage() {
-  const supabase = createClientComponentClient<Database>();
+  const session = useSession();
+  const supabase = useSupabaseClient<Database>();
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [name, setName] = useState("");
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const {
-        data: { user: authUser },
-        error: authError,
-      } = await supabase.auth.getUser();
+    if (!session) return;
 
-      if (authError || !authUser) {
-        console.error("Erreur de récupération de l'utilisateur :", authError);
-        setLoading(false);
-        return;
-      }
-
-      const { data, error: fetchError } = await supabase
-        .from("users")
-        .select("id, email, full_name, avatar_url")
-        .eq("id", authUser.id)
+    const fetchProfile = async () => {
+      const { data, error } = await supabase
+        .from("Profile")
+        .select("*")
+        .eq("id", session.user.id)
         .single();
 
-      if (fetchError) {
-        console.error(
-          "Erreur lors de la récupération des données utilisateur :",
-          fetchError
-        );
-        setUser({
-          id: authUser.id,
-          email: authUser.email ?? null, // ✅ force le fallback à null
-          full_name: null,
-          avatar_url: null,
-        }); // fallback partiel
+      if (data) {
+        setUser(data);
+        setName(data.full_name ?? "");
       } else {
-        setUser(data as UserProfile); // ✅ cast explicite
+        console.error("Erreur récupération profil :", error);
       }
 
       setLoading(false);
     };
 
-    fetchUser();
-  }, [supabase]);
+    fetchProfile();
+  }, [session, supabase]);
+
+  const updateProfile = async () => {
+    if (!session) return;
+
+    const { error } = await supabase
+      .from("Profile")
+      .update({
+        full_name: name,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", session.user.id);
+
+    if (error) {
+      toast.error("Erreur lors de la mise à jour");
+    } else {
+      toast.success("Profil mis à jour !");
+      setUser((prev) => (prev ? { ...prev, full_name: name } : null));
+    }
+  };
+
+  const signOut = async () => {
+    await supabase.auth.signOut();
+    toast("Déconnexion réussie !");
+    window.location.href = "/";
+  };
+
+  const getInitials = (name: string | null | undefined) => {
+    if (!name) return "?";
+    return name
+      .split(" ")
+      .map((n) => n.charAt(0).toUpperCase())
+      .join("")
+      .slice(0, 2);
+  };
+
+  const stringToColor = (str: string) => {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = hash % 360;
+    return `hsl(${hue}, 60%, 70%)`;
+  };
 
   if (loading) {
     return (
@@ -76,25 +102,25 @@ export default function ComptePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-blue-50 p-6 md:p-12 max-w-4xl mx-auto">
-      <h2 className="text-2xl font-medium text-gray-900 mb-6">
-        Bienvenue, {user.full_name ?? "Utilisateur"} 👋
-      </h2>
+      <Toaster position="top-center" />
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-medium text-gray-900">
+          Bienvenue, {user.full_name ?? user.email ?? "Utilisateur"} 👋
+        </h2>
+      </div>
 
-      {/* Profil utilisateur */}
+      {/* Avatar (initiales dynamiques) */}
       <div className="flex items-center space-x-6 mb-8">
-        {user.avatar_url ? (
-          <Image
-            src={user.avatar_url}
-            alt="Photo de profil"
-            width={80}
-            height={80}
-            className="rounded-full"
-          />
-        ) : (
-          <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 text-xl">
-            ?
-          </div>
-        )}
+        <div
+          className="w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl font-bold"
+          style={{
+            backgroundColor: stringToColor(
+              user.full_name ?? user.email ?? "user"
+            ),
+          }}
+        >
+          {getInitials(user.full_name ?? user.email)}
+        </div>
 
         <div>
           <p className="text-lg font-semibold text-gray-900">
@@ -107,34 +133,54 @@ export default function ComptePage() {
       </div>
 
       {/* Formulaire de mise à jour */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm space-y-4">
-        <label className="block text-gray-700 font-medium mb-1" htmlFor="name">
-          Nom
-        </label>
-        <input
-          id="name"
-          type="text"
-          defaultValue={user.full_name ?? ""}
-          className="w-full text-gray-900 bg-gray-100 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+      <div className="bg-white rounded-xl border border-gray-200 p-6 shadow space-y-4">
+        <div>
+          <label
+            htmlFor="fullName"
+            className="block text-gray-700 font-medium mb-1"
+          >
+            Nom complet
+          </label>
+          <input
+            id="fullName"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full text-gray-900 bg-gray-100 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
 
-        <label
-          className="block text-gray-700 font-medium mb-1 mt-4"
-          htmlFor="email"
-        >
-          Email
-        </label>
-        <input
-          id="email"
-          type="email"
-          defaultValue={user.email ?? ""}
-          className="w-full text-gray-900 bg-gray-100 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          disabled
-        />
+        <div>
+          <label
+            htmlFor="email"
+            className="block text-gray-700 font-medium mb-1"
+          >
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            value={user.email ?? ""}
+            disabled
+            className="w-full text-gray-600 bg-gray-100 p-3 rounded-md cursor-not-allowed"
+          />
+        </div>
 
-        <button className="bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition">
-          Mettre à jour
-        </button>
+        <div className="flex flex-wrap gap-4">
+          <button
+            onClick={updateProfile}
+            className="bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition"
+          >
+            Mettre à jour le profil
+          </button>
+
+          <button
+            onClick={signOut}
+            className="bg-red-600 text-white px-6 py-3 rounded-md font-medium hover:bg-red-700 transition"
+          >
+            Se déconnecter
+          </button>
+        </div>
       </div>
     </div>
   );

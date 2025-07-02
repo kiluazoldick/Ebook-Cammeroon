@@ -32,12 +32,14 @@ export default function Cta() {
                 placeholder="Votre email"
               />
               <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3 sm:flex-shrink-0">
-                <button
-                  type="submit"
-                  className="w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700"
-                >
-                  Essai gratuit
-                </button>
+                <Link href="auth/connexion">
+                  <button
+                    type="submit"
+                    className="w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700"
+                  >
+                    Essai gratuit
+                  </button>
+                </Link>
               </div>
             </form>
             <p className="mt-3 text-sm text-orange-700">

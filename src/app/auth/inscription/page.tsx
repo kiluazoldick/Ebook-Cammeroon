@@ -36,6 +36,10 @@ export default function RegisterPage() {
       email,
       password,
       options: {
+        emailRedirectTo:
+          process.env.NODE_ENV === "development"
+            ? "http://localhost:3000/dashboard"
+            : "https://ebookcameroon.vercel.app/dashboard",
         data: {
           full_name: fullName,
         },
@@ -57,13 +61,6 @@ export default function RegisterPage() {
       // Optionnel : rediriger après un délai
       setTimeout(() => router.push("/auth/connexion"), 5000);
     }
-  };
-
-  const handleGoogleSignUp = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-    });
-    if (error) setError(error.message);
   };
 
   return (
@@ -122,131 +119,109 @@ export default function RegisterPage() {
             </p>
           </div>
 
-          <button
-            onClick={handleGoogleSignUp}
-            className="w-full flex items-center justify-center border border-gray-300 rounded-lg py-3 font-medium text-gray-700 hover:bg-gray-100 transition-colors"
-            type="button"
-          >
-            <Image
-              src="https://www.gstatic.com/images/branding/googleg/1x/googleg_standard_color_48dp.png"
-              alt="Google Logo"
-              width={20}
-              height={20}
-              className="mr-3"
-            />
-            Continuer avec Google
-          </button>
+          <form onSubmit={handleRegister} className="space-y-5">
+            {error && (
+              <p className="text-red-600 text-center text-sm font-medium">
+                {error}
+              </p>
+            )}
+            {successMsg && (
+              <p className="text-green-600 text-center text-sm font-medium">
+                {successMsg}
+              </p>
+            )}
 
-          <div className="flex items-center justify-center relative">
-            <div className="border-t border-gray-300 w-full"></div>
-            <span className="absolute bg-white px-4 text-gray-500 text-sm">
-              OU
-            </span>
-          </div>
-
-         <form onSubmit={handleRegister} className="space-y-5">
-  {error && (
-    <p className="text-red-600 text-center text-sm font-medium">
-      {error}
-    </p>
-  )}
-  {successMsg && (
-    <p className="text-green-600 text-center text-sm font-medium">
-      {successMsg}
-    </p>
-  )}
-
-  <div>
-    <label
-      htmlFor="fullName"
-      className="block text-sm font-semibold text-gray-700 mb-1"
-    >
-      Nom complet
-    </label>
-    <input
-      id="fullName"
-      type="text"
-      value={fullName}
-      onChange={(e) => setFullName(e.target.value)}
-      placeholder="Jean Dupont"
-      required
-      className="w-full px-4 py-3 border border-gray-300 rounded-md
+            <div>
+              <label
+                htmlFor="fullName"
+                className="block text-sm font-semibold text-gray-700 mb-1"
+              >
+                Nom complet
+              </label>
+              <input
+                id="fullName"
+                type="text"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                placeholder="Jean Dupont"
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-md
                  focus:outline-none focus:ring-2 focus:ring-orange-500
                  transition text-black"
-    />
-  </div>
+              />
+            </div>
 
-  <div>
-    <label
-      htmlFor="email"
-      className="block text-sm font-semibold text-gray-700 mb-1"
-    >
-      Adresse email
-    </label>
-    <input
-      id="email"
-      type="email"
-      value={email}
-      onChange={(e) => setEmail(e.target.value)}
-      placeholder="exemple@domaine.com"
-      required
-      className="w-full px-4 py-3 border border-gray-300 rounded-md
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-semibold text-gray-700 mb-1"
+              >
+                Adresse email
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="exemple@domaine.com"
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-md
                  focus:outline-none focus:ring-2 focus:ring-orange-500
                  transition text-black"
-    />
-  </div>
+              />
+            </div>
 
-  <div>
-    <label
-      htmlFor="password"
-      className="block text-sm font-semibold text-gray-700 mb-1"
-    >
-      Mot de passe
-    </label>
-    <input
-      id="password"
-      type="password"
-      value={password}
-      onChange={(e) => setPassword(e.target.value)}
-      placeholder="••••••••"
-      required
-      className="w-full px-4 py-3 border border-gray-300 rounded-md
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-semibold text-gray-700 mb-1"
+              >
+                Mot de passe
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-md
                  focus:outline-none focus:ring-2 focus:ring-orange-500
                  transition text-black"
-    />
-    <p className="mt-1 text-xs text-gray-500">
-      Minimum 8 caractères, avec au moins une majuscule et un chiffre
-    </p>
-  </div>
+              />
+              <p className="mt-1 text-xs text-gray-500">
+                Minimum 8 caractères, avec au moins une majuscule et un chiffre
+              </p>
+            </div>
 
-  <div className="flex items-center">
-    <input
-      id="terms"
-      type="checkbox"
-      checked={termsAccepted}
-      onChange={(e) => setTermsAccepted(e.target.checked)}
-      className="h-5 w-5 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
-      required
-    />
-    <label htmlFor="terms" className="ml-3 text-sm text-gray-700">
-      J’accepte les{" "}
-      <Link
-        href="/conditions"
-        className="text-orange-600 hover:underline font-medium"
-      >
-        conditions d’utilisation
-      </Link>
-    </label>
-  </div>
+            <div className="flex items-center">
+              <input
+                id="terms"
+                type="checkbox"
+                checked={termsAccepted}
+                onChange={(e) => setTermsAccepted(e.target.checked)}
+                className="h-5 w-5 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+                required
+              />
+              <label htmlFor="terms" className="ml-3 text-sm text-gray-700">
+                J’accepte les{" "}
+                <Link
+                  href="/conditions"
+                  className="text-orange-600 hover:underline font-medium"
+                >
+                  conditions d’utilisation
+                </Link>
+              </label>
+            </div>
 
-  <button
-    type="submit"
-    disabled={loading}
-    className="w-full bg-orange-600 text-white py-3 rounded-md font-semibold hover:bg-orange-700 transition-colors disabled:opacity-50"
-  >
-    {loading ? "Inscription en cours..." : "S’inscrire gratuitement"}
-  </button>
-</form>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-orange-600 text-white py-3 rounded-md font-semibold hover:bg-orange-700 transition-colors disabled:opacity-50"
+            >
+              {loading ? "Inscription en cours..." : "S’inscrire gratuitement"}
+            </button>
+          </form>
         </div>
       </div>
     </div>

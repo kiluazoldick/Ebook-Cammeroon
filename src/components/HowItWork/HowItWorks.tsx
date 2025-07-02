@@ -71,7 +71,7 @@ export default function HowItWorks() {
         {/* Call to action */}
         <div className="mt-12 text-center">
           <Link
-            href="#demo"
+            href="/auth/connexion"
             className="inline-flex items-center px-6 py-3 rounded-md bg-orange-600 text-white font-medium shadow-sm hover:bg-orange-700 transition-colors"
           >
             Voir comment ça marche

@@ -31,13 +31,6 @@ export default function LoginPage() {
     setLoading(false);
   };
 
-  const handleGoogleLogin = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-    });
-    if (error) setError(error.message);
-  };
-
   return (
     <div className="min-h-screen flex font-sans">
       {/* Sidebar */}
@@ -90,92 +83,64 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Google Button */}
-          <div>
-            <button
-              onClick={handleGoogleLogin}
-              className="w-full flex items-center justify-center px-6 py-3.5
-                border border-gray-300 rounded-xl text-base font-medium
-                text-gray-700 hover:bg-gray-100 transition-colors"
-            >
-              <Image
-                src="https://www.gstatic.com/images/branding/googleg/1x/googleg_standard_color_48dp.png"
-                alt="Google Logo"
-                width={20}
-                height={20}
-                className="mr-3"
+          <form onSubmit={handleLogin} className="space-y-5">
+            {error && <p className="text-red-600 text-sm">{error}</p>}
+
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg
+                 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-black"
+                placeholder="votre@email.com"
+                required
               />
-              Se connecter avec Google
-            </button>
-          </div>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300"></div>
             </div>
-            <div className="relative flex justify-center">
-              <span className="px-3 bg-white text-gray-400 text-sm">OU</span>
+
+            <div>
+              <div className="flex justify-between items-center mb-1">
+                <label
+                  htmlFor="password"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Mot de passe
+                </label>
+                <Link
+                  href="/auth/mot-de-passe-oublie"
+                  className="text-orange-600 text-sm hover:underline"
+                >
+                  Mot de passe oublié ?
+                </Link>
+              </div>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg
+                 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-black"
+                placeholder="••••••••"
+                required
+              />
             </div>
-          </div>
 
-         <form onSubmit={handleLogin} className="space-y-5">
-  {error && <p className="text-red-600 text-sm">{error}</p>}
-
-  <div>
-    <label
-      htmlFor="email"
-      className="block text-sm font-medium text-gray-700 mb-1"
-    >
-      Email
-    </label>
-    <input
-      id="email"
-      type="email"
-      value={email}
-      onChange={(e) => setEmail(e.target.value)}
-      className="w-full px-4 py-3 border border-gray-300 rounded-lg
-                 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-black"
-      placeholder="votre@email.com"
-      required
-    />
-  </div>
-
-  <div>
-    <div className="flex justify-between items-center mb-1">
-      <label
-        htmlFor="password"
-        className="text-sm font-medium text-gray-700"
-      >
-        Mot de passe
-      </label>
-      <Link
-        href="/auth/mot-de-passe-oublie"
-        className="text-orange-600 text-sm hover:underline"
-      >
-        Mot de passe oublié ?
-      </Link>
-    </div>
-    <input
-      id="password"
-      type="password"
-      value={password}
-      onChange={(e) => setPassword(e.target.value)}
-      className="w-full px-4 py-3 border border-gray-300 rounded-lg
-                 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-black"
-      placeholder="••••••••"
-      required
-    />
-  </div>
-
-  <button
-    type="submit"
-    disabled={loading}
-    className="w-full bg-orange-600 text-white py-3.5 px-6 rounded-xl
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-orange-600 text-white py-3.5 px-6 rounded-xl
              font-medium hover:bg-orange-700 transition-colors"
-  >
-    {loading ? "Connexion..." : "Se connecter"}
-  </button>
-</form>
+            >
+              {loading ? "Connexion..." : "Se connecter"}
+            </button>
+          </form>
         </div>
       </div>
     </div>

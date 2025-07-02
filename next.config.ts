@@ -24,4 +24,11 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = {
+  nextConfig,
+  experimental: {
+    serverActions: true,
+  },
+
+  matcher: ["/dashboard/:path*"],
+};

@@ -1,6 +1,9 @@
-// app/providers.js
 "use client";
 
+import { useState } from "react";
+import PropTypes from "prop-types";
+
+// Font Awesome
 import { config, library } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import {
@@ -23,10 +26,12 @@ import {
   faLinkedinIn,
 } from "@fortawesome/free-brands-svg-icons";
 
-// Configure Font Awesome
-config.autoAddCss = false;
+// Supabase
+import { SessionContextProvider } from "@supabase/auth-helpers-react";
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 
-// Add icons to library
+// ⚙️ FontAwesome config
+config.autoAddCss = false;
 library.add(
   faFileUpload,
   faScroll,
@@ -45,10 +50,15 @@ library.add(
   faLinkedinIn
 );
 
-import PropTypes from "prop-types";
-
+// ✅ Providers global
 export function Providers({ children }) {
-  return <>{children}</>;
+  const [supabaseClient] = useState(() => createBrowserSupabaseClient());
+
+  return (
+    <SessionContextProvider supabaseClient={supabaseClient}>
+      {children}
+    </SessionContextProvider>
+  );
 }
 
 Providers.propTypes = {

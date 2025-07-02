@@ -51,7 +51,7 @@ export default function DashboardPage() {
             Basé sur vos lectures et préférences.
           </p>
           <Link
-            href="/dashboard/recommandations"
+            href="/dashboard/recommandes"
             className="text-orange-600 mt-3 inline-block text-sm font-medium hover:underline"
           >
             Voir les suggestions

@@ -155,7 +155,7 @@ const CTAButton = ({
   fullWidth?: boolean;
 }) => (
   <Link
-    href="/ebooks"
+    href="/auth/connexion"
     onClick={onClick}
     className={`${
       fullWidth ? "w-full" : ""

@@ -29,7 +29,7 @@ export default function Hero() {
               </Link>
 
               <Link
-                href="#discover"
+                href="/auth/connexion"
                 className="inline-flex items-center justify-center px-8 py-3 border border-orange-600 text-base font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 transition"
               >
                 Explorer les histoires
