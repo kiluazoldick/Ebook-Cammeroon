@@ -20,15 +20,11 @@ const nextConfig = {
       "covers.openlibrary.org",
       "gallica.bnf.fr",
       "lesecrituresdafrique.com",
+      "edbpraqttgglpqggkzfr.supabase.co",
+      "edbpraqttgglpqggkzfr.supabase.co",
+      "edbpraqttgglpqggkzfr.supabase.co",
     ],
   },
 };
 
-module.exports = {
-  nextConfig,
-  experimental: {
-    serverActions: true,
-  },
-
-  matcher: ["/dashboard/:path*"],
-};
+module.exports = nextConfig;
