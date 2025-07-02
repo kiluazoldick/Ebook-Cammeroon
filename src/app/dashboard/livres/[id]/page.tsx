@@ -1,10 +1,9 @@
-// app/read/[id]/page.tsx
+// app/dashboard/livres/[id]/page.tsx
 "use client";
 
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { Document, Page, pdfjs } from "react-pdf";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSpinner,
@@ -12,23 +11,13 @@ import {
   faDownload,
   faSearchPlus,
   faSearchMinus,
+  faBook,
+  faHeart,
+  faExpand,
+  faCompress,
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
-import "react-pdf/dist/Page/AnnotationLayer.css";
-import "react-pdf/dist/Page/TextLayer.css";
 import Image from "next/image";
-
-// En haut de votre fichier
-const setupPdfWorker = () => {
-  // Essayez d'abord avec unpkg
-  pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
-};
-
-// Appelez cette fonction avant de rendre le composant
-setupPdfWorker();
-
-// Solution garantie pour le worker PDF.js
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 type Book = {
   id: string;
@@ -37,18 +26,19 @@ type Book = {
   fileUrl: string;
   coverUrl?: string;
   description?: string;
+  reads: number;
+  likes: number;
 };
 
 export default function ReadBookPage() {
   const { id } = useParams();
   const [book, setBook] = useState<Book | null>(null);
   const [loading, setLoading] = useState(true);
-  const [numPages, setNumPages] = useState<number | null>(null);
-  const [pageNumber, setPageNumber] = useState(1);
   const [pdfError, setPdfError] = useState(false);
   const [scale, setScale] = useState(1);
-  const [containerWidth, setContainerWidth] = useState(800);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [isReading, setIsReading] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const pdfContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -65,6 +55,11 @@ export default function ReadBookPage() {
           console.error("Erreur de chargement du livre:", error);
         } else {
           setBook(data);
+          // Mettre à jour le compteur de lectures
+          await supabase
+            .from("Book")
+            .update({ reads: (data.reads ?? 0) + 1 })
+            .eq("id", id);
         }
       } catch (error) {
         console.error("Erreur inattendue:", error);
@@ -76,45 +71,116 @@ export default function ReadBookPage() {
     fetchBook();
   }, [id]);
 
-  useEffect(() => {
-    // Mettre à jour la largeur du conteneur lorsque la fenêtre est redimensionnée
-    const updateContainerWidth = () => {
-      if (containerRef.current) {
-        const width = Math.min(containerRef.current.clientWidth, 1200);
-        setContainerWidth(width);
+  // Gestion du plein écran
+  const toggleFullscreen = () => {
+    if (!pdfContainerRef.current) return;
+
+    if (!isFullscreen) {
+      if (pdfContainerRef.current.requestFullscreen) {
+        pdfContainerRef.current.requestFullscreen();
+      } else if (
+        (
+          pdfContainerRef.current as HTMLElement & {
+            mozRequestFullScreen?: () => Promise<void>;
+          }
+        ).mozRequestFullScreen
+      ) {
+        (
+          pdfContainerRef.current as HTMLElement & {
+            mozRequestFullScreen?: () => Promise<void>;
+          }
+        ).mozRequestFullScreen!();
+      } else if (
+        (
+          pdfContainerRef.current as HTMLElement & {
+            webkitRequestFullscreen?: () => Promise<void>;
+          }
+        ).webkitRequestFullscreen
+      ) {
+        (
+          pdfContainerRef.current as HTMLElement & {
+            webkitRequestFullscreen?: () => Promise<void>;
+          }
+        ).webkitRequestFullscreen!();
+      } else if (
+        (
+          pdfContainerRef.current as HTMLElement & {
+            msRequestFullscreen?: () => Promise<void>;
+          }
+        ).msRequestFullscreen
+      ) {
+        (
+          pdfContainerRef.current as HTMLElement & {
+            msRequestFullscreen?: () => Promise<void>;
+          }
+        ).msRequestFullscreen!();
       }
+      setIsFullscreen(true);
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (
+        (document as Document & { mozCancelFullScreen?: () => void })
+          .mozCancelFullScreen
+      ) {
+        (document as Document & { mozCancelFullScreen?: () => void })
+          .mozCancelFullScreen!();
+      } else if (
+        (document as Document & { webkitExitFullscreen?: () => void })
+          .webkitExitFullscreen
+      ) {
+        (document as Document & { webkitExitFullscreen?: () => void })
+          .webkitExitFullscreen!();
+      } else if (
+        (document as Document & { msExitFullscreen?: () => void })
+          .msExitFullscreen
+      ) {
+        (document as Document & { msExitFullscreen?: () => void })
+          .msExitFullscreen!();
+      }
+      setIsFullscreen(false);
+    }
+  };
+
+  // Téléchargement direct du PDF
+  const downloadBook = () => {
+    if (!book?.fileUrl) return;
+
+    const link = document.createElement("a");
+    link.href = book.fileUrl;
+    link.download = `${book.title.replace(/\s+/g, "_")}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // Gestion des événements plein écran
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
     };
 
-    updateContainerWidth();
-    window.addEventListener("resize", updateContainerWidth);
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+    document.addEventListener("mozfullscreenchange", handleFullscreenChange);
+    document.addEventListener("MSFullscreenChange", handleFullscreenChange);
 
-    return () => window.removeEventListener("resize", updateContainerWidth);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      document.removeEventListener(
+        "webkitfullscreenchange",
+        handleFullscreenChange
+      );
+      document.removeEventListener(
+        "mozfullscreenchange",
+        handleFullscreenChange
+      );
+      document.removeEventListener(
+        "MSFullscreenChange",
+        handleFullscreenChange
+      );
+    };
   }, []);
-
-  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
-    setNumPages(numPages);
-  };
-
-  const onDocumentLoadError = (error: Error) => {
-    console.error("Erreur de chargement du PDF:", error);
-    setPdfError(true);
-  };
-
-  const goToPreviousPage = () => {
-    setPageNumber((prev) => Math.max(1, prev - 1));
-  };
-
-  const goToNextPage = () => {
-    if (numPages) {
-      setPageNumber((prev) => Math.min(numPages, prev + 1));
-    }
-  };
-
-  const downloadBook = () => {
-    if (book?.fileUrl) {
-      window.open(book.fileUrl, "_blank");
-    }
-  };
 
   const zoomIn = () => {
     setScale((prev) => Math.min(prev + 0.1, 2));
@@ -135,7 +201,7 @@ export default function ReadBookPage() {
           icon={faSpinner}
           className="text-orange-500 text-4xl animate-spin"
         />
-        <span className="ml-3">Chargement du livre...</span>
+        <span className="ml-3 text-black">Chargement du livre...</span>
       </div>
     );
   }
@@ -150,7 +216,7 @@ export default function ReadBookPage() {
           Le livre que vous cherchez n&apos;existe pas ou a été supprimé.
         </p>
         <Link
-          href="/populaire"
+          href="/dashboard/populaires"
           className="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition"
         >
           Retour à la bibliothèque
@@ -164,7 +230,7 @@ export default function ReadBookPage() {
       {/* Barre d'outils */}
       <div className="bg-white shadow-md py-3 px-4 flex flex-wrap justify-between items-center gap-3">
         <Link
-          href="/populaire"
+          href="/dashboard/populaires"
           className="text-orange-500 hover:text-orange-700 flex items-center"
         >
           <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
@@ -172,176 +238,182 @@ export default function ReadBookPage() {
         </Link>
 
         <div className="text-center mx-4 flex-1 min-w-[200px]">
-          <h1 className="text-xl font-bold line-clamp-1" title={book.title}>
+          <h1
+            className="text-xl font-bold line-clamp-1 text-black"
+            title={book.title}
+          >
             {book.title}
           </h1>
           <p className="text-sm text-gray-600">par {book.author}</p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <button
-            onClick={zoomOut}
-            title="Zoom arrière"
-            className="bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300"
-          >
-            <FontAwesomeIcon icon={faSearchMinus} />
-          </button>
-
-          <button
-            onClick={resetZoom}
-            className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded"
-          >
-            {Math.round(scale * 100)}%
-          </button>
-
-          <button
-            onClick={zoomIn}
-            title="Zoom avant"
-            className="bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300"
-          >
-            <FontAwesomeIcon icon={faSearchPlus} />
-          </button>
-
-          <button
-            onClick={downloadBook}
-            className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 flex items-center"
-          >
-            <FontAwesomeIcon icon={faDownload} className="mr-2" />
-            Télécharger
-          </button>
-        </div>
+        <button
+          onClick={downloadBook}
+          className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 flex items-center"
+        >
+          <FontAwesomeIcon icon={faDownload} className="mr-2" />
+          Télécharger
+        </button>
       </div>
 
-      {/* Lecteur PDF */}
-      <div className="container mx-auto px-4 py-8" ref={containerRef}>
-        {pdfError ? (
-          <div className="text-center py-12 bg-white rounded-lg shadow-sm max-w-3xl mx-auto">
-            <h2 className="text-xl font-semibold text-gray-700 mb-4">
-              Erreur de chargement du livre
-            </h2>
-            <p className="text-gray-600 mb-6 max-w-xl mx-auto">
-              Impossible de charger le fichier PDF. Veuillez vérifier que le
-              lien est correct et que vous êtes connecté à internet.
-            </p>
-            <div className="flex flex-wrap justify-center gap-3">
-              <button
-                onClick={() => window.location.reload()}
-                className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300"
-              >
-                Réessayer
-              </button>
-              <Link
-                href="/populaire"
-                className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
-              >
-                Retour à la bibliothèque
-              </Link>
+      {/* Contenu principal */}
+      <div className="container mx-auto px-4 py-8">
+        {!isReading ? (
+          <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                Prêt à lire{" "}
+                <span className="text-orange-500">{book.title}</span>?
+              </h2>
+              <p className="text-gray-600">
+                Cliquez sur le bouton ci-dessous pour commencer votre lecture
+              </p>
+            </div>
+
+            <div className="flex flex-col md:flex-row gap-8 items-center">
+              {book.coverUrl && (
+                <div className="flex-shrink-0">
+                  <Image
+                    src={book.coverUrl}
+                    alt={`Couverture de ${book.title}`}
+                    width={256}
+                    height={384}
+                    className="w-64 h-96 object-cover rounded-lg shadow-md"
+                    unoptimized
+                  />
+                </div>
+              )}
+
+              <div className="flex-1">
+                <div className="mb-6">
+                  <h3 className="text-xl font-semibold mb-4 text-black">
+                    {book.title}
+                  </h3>
+                  <p className="text-gray-700 mb-4">par {book.author}</p>
+                  {book.description && (
+                    <p className="text-gray-600 mb-6">{book.description}</p>
+                  )}
+
+                  <div className="flex gap-4 text-sm text-gray-500">
+                    <div className="flex items-center">
+                      <FontAwesomeIcon icon={faBook} className="mr-1" />
+                      <span>{book.reads || 0} lectures</span>
+                    </div>
+                    <div className="flex items-center">
+                      <FontAwesomeIcon
+                        icon={faHeart}
+                        className="text-red-500 mr-1"
+                      />
+                      <span>{book.likes || 0} j&apos;aime</span>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setIsReading(true)}
+                  className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg w-full transition"
+                >
+                  Commencer la lecture
+                </button>
+              </div>
             </div>
           </div>
         ) : (
-          <>
-            <div className="flex flex-wrap justify-center gap-3 mb-6 bg-white p-3 rounded-lg shadow-sm max-w-3xl mx-auto">
-              <button
-                onClick={goToPreviousPage}
-                disabled={pageNumber <= 1}
-                className={`px-4 py-2 rounded-l ${
-                  pageNumber <= 1
-                    ? "bg-gray-200 text-gray-400"
-                    : "bg-orange-500 text-white hover:bg-orange-600"
-                }`}
-              >
-                Précédent
-              </button>
+          <div
+            ref={pdfContainerRef}
+            className="bg-white p-4 rounded-lg shadow-lg w-full max-w-4xl overflow-auto mx-auto"
+          >
+            {pdfError ? (
+              <div className="text-center py-12">
+                <h2 className="text-xl font-semibold text-gray-700 mb-4">
+                  Erreur de chargement du livre
+                </h2>
+                <p className="text-gray-600 mb-6 max-w-xl mx-auto">
+                  Impossible de charger le fichier PDF. Veuillez vérifier que le
+                  lien est correct et que vous êtes connecté à internet.
+                </p>
+                <div className="flex flex-wrap justify-center gap-3">
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300"
+                  >
+                    Réessayer
+                  </button>
+                  <button
+                    onClick={() => setIsReading(false)}
+                    className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
+                  >
+                    Retour aux détails
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="w-full">
+                <div className="flex flex-wrap justify-center gap-3 mb-4">
+                  <button
+                    onClick={zoomOut}
+                    title="Zoom arrière"
+                    className="bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300"
+                  >
+                    <FontAwesomeIcon icon={faSearchMinus} />
+                  </button>
 
-              <div className="flex items-center">
-                <input
-                  type="number"
-                  min="1"
-                  max={numPages ?? 1}
-                  value={pageNumber}
-                  onChange={(e) => {
-                    const page = parseInt(e.target.value);
-                    if (!isNaN(page)) {
-                      setPageNumber(Math.max(1, Math.min(numPages ?? 1, page)));
+                  <button
+                    onClick={resetZoom}
+                    className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded"
+                  >
+                    {Math.round(scale * 100)}%
+                  </button>
+
+                  <button
+                    onClick={zoomIn}
+                    title="Zoom avant"
+                    className="bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300"
+                  >
+                    <FontAwesomeIcon icon={faSearchPlus} />
+                  </button>
+
+                  <button
+                    onClick={toggleFullscreen}
+                    title={
+                      isFullscreen
+                        ? "Quitter le plein écran"
+                        : "Mode plein écran"
                     }
-                  }}
-                  className="w-16 px-2 py-2 border border-gray-300 rounded text-center"
-                />
-                <span className="mx-2">/</span>
-                <span>{numPages ?? "?"}</span>
-              </div>
+                    className="bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300"
+                  >
+                    <FontAwesomeIcon
+                      icon={isFullscreen ? faCompress : faExpand}
+                    />
+                  </button>
 
-              <button
-                onClick={goToNextPage}
-                disabled={!numPages || pageNumber >= numPages}
-                className={`px-4 py-2 rounded-r ${
-                  !numPages || pageNumber >= numPages
-                    ? "bg-gray-200 text-gray-400"
-                    : "bg-orange-500 text-white hover:bg-orange-600"
-                }`}
-              >
-                Suivant
-              </button>
-            </div>
+                  <button
+                    onClick={() => setIsReading(false)}
+                    className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300"
+                  >
+                    Retour aux détails
+                  </button>
+                </div>
 
-            <div className="flex justify-center">
-              <div className="bg-white p-4 rounded-lg shadow-lg w-full max-w-4xl overflow-auto">
-                <Document
-                  file={book.fileUrl}
-                  onLoadSuccess={onDocumentLoadSuccess}
-                  onLoadError={onDocumentLoadError}
-                  loading={
-                    <div className="flex flex-col items-center justify-center h-[80vh]">
-                      <FontAwesomeIcon
-                        icon={faSpinner}
-                        className="text-orange-500 text-4xl animate-spin mb-4"
-                      />
-                      <p>Chargement du livre en cours...</p>
-                    </div>
-                  }
-                  className="pdf-document"
-                >
-                  <Page
-                    pageNumber={pageNumber}
-                    width={containerWidth * scale}
-                    renderAnnotationLayer={true}
-                    renderTextLayer={true}
+                <div className="overflow-auto border rounded-lg">
+                  <iframe
+                    src={`${book.fileUrl}#view=fitH`}
+                    title={`Livre: ${book.title} - Aperçu PDF`}
+                    className="w-full min-h-[70vh]"
+                    style={{
+                      transform: `scale(${scale})`,
+                      transformOrigin: "0 0",
+                      width: `${100 / scale}%`,
+                      height: `${100 / scale}%`,
+                    }}
+                    onError={() => setPdfError(true)}
                   />
-                </Document>
-              </div>
-            </div>
-          </>
-        )}
-      </div>
-
-      {/* Section d'information sur le livre */}
-      {book && !pdfError && (
-        <div className="bg-white border-t mt-8 py-8">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <h2 className="text-2xl font-bold mb-4">À propos de ce livre</h2>
-            {book.coverUrl && (
-              <div className="flex-shrink-0">
-                <Image
-                  src={book.coverUrl}
-                  alt={`Couverture de ${book.title}`}
-                  width={192}
-                  height={256}
-                  className="w-48 h-64 object-cover rounded-lg shadow-md"
-                  style={{ width: "192px", height: "256px" }}
-                  unoptimized
-                />
+                </div>
               </div>
             )}
-            <div>
-              <h3 className="text-xl font-semibold mb-2">{book.title}</h3>
-              <p className="text-gray-700 mb-4">par {book.author}</p>
-              {book.description && (
-                <p className="text-gray-600">{book.description}</p>
-              )}
-            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

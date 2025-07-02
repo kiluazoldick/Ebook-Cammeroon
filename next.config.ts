@@ -9,6 +9,11 @@ const nextConfig = {
       "pin.it",
       "drive.google.com",
       "edbpraqttgglpqggkzfr.supabase.co",
+      "m.media-amazon.com",
+      "upload.wikimedia.org",
+      "covers.openlibrary.org",
+      "gallica.bnf.fr",
+      "lesecrituresdafrique.com",
     ],
   },
 };

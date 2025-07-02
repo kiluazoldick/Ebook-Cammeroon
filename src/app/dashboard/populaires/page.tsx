@@ -33,7 +33,6 @@ export default function PopularPage() {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState("reads");
-
   const [searchQuery, setSearchQuery] = useState("");
 
   // Charger les livres depuis Supabase
@@ -218,7 +217,8 @@ export default function PopularPage() {
           } else {
             content = (
               <>
-                <div className="grid  sm:grid-cols-2  gap-6">
+                {/* MODIFICATION PRINCIPALE ICI */}
+                <div className="flex flex-wrap justify-center gap-6">
                   {books.map((book) => (
                     <BookCard
                       key={book.id}
@@ -227,13 +227,6 @@ export default function PopularPage() {
                       onLike={() => updateLikes(book.id)}
                     />
                   ))}
-                </div>
-
-                {/* Bouton de pagination */}
-                <div className="mt-10 text-center">
-                  <button className="bg-white border border-orange-500 text-orange-500 px-6 py-2 rounded-lg hover:bg-orange-50 transition">
-                    Voir plus de livres
-                  </button>
                 </div>
               </>
             );
@@ -245,7 +238,7 @@ export default function PopularPage() {
   );
 }
 
-// Composant BookCard
+// Composant BookCard - MODIFICATIONS RESPONSIVES ICI
 const BookCard = ({
   book,
   onRead,
@@ -265,15 +258,7 @@ const BookCard = ({
   };
 
   return (
-    <div className="bg-white rounded-xl w-[350px] shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col">
-      {/* Badge populaire */}
-      {book.reads > 1000 && (
-        <div className="absolute top-2 right-2 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full flex items-center">
-          <FontAwesomeIcon icon={faFire} className="mr-1" />
-          Populaire
-        </div>
-      )}
-
+    <div className="bg-white rounded-xl w-full max-w-[350px] sm:max-w-none sm:w-[calc(50%-20px)] lg:w-[calc(50%-24px)] shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col">
       {/* Couverture du livre */}
       <div className="h-48 relative">
         {book.coverUrl ? (
@@ -282,7 +267,7 @@ const BookCard = ({
             alt={`Couverture de ${book.title}`}
             className="w-full h-full object-cover"
             fill
-            sizes="(max-width: 768px) 100vw, 25vw"
+            sizes="(max-width: 768px) 100vw, 50vw"
             style={{ objectFit: "cover" }}
             priority={false}
           />
