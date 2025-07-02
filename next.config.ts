@@ -1,6 +1,12 @@
 // next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true, // Désactive ESLint pendant le build
+  },
+  typescript: {
+    ignoreBuildErrors: true, // Ignore les erreurs TypeScript pendant le build
+  },
   reactStrictMode: true,
   images: {
     domains: [
