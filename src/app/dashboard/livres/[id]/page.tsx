@@ -1,4 +1,3 @@
-// app/dashboard/livres/[id]/page.tsx
 "use client";
 
 import { useEffect, useState, useRef } from "react";
@@ -15,6 +14,7 @@ import {
   faHeart,
   faExpand,
   faCompress,
+  faPlay,
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import Image from "next/image";
@@ -196,7 +196,7 @@ export default function ReadBookPage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center h-screen bg-white">
         <FontAwesomeIcon
           icon={faSpinner}
           className="text-orange-500 text-4xl animate-spin"
@@ -208,7 +208,7 @@ export default function ReadBookPage() {
 
   if (!book) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen text-center p-4">
+      <div className="flex flex-col justify-center items-center h-screen text-center p-4 bg-white">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">
           Livre non trouvé
         </h2>
@@ -226,12 +226,12 @@ export default function ReadBookPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Barre d'outils */}
-      <div className="bg-white shadow-md py-3 px-4 flex flex-wrap justify-between items-center gap-3">
+    <div className="min-h-screen bg-white">
+      {/* Barre d'outils compacte */}
+      <div className="bg-white border-b py-3 px-4 flex flex-wrap justify-between items-center gap-3">
         <Link
           href="/dashboard/populaires"
-          className="text-orange-500 hover:text-orange-700 flex items-center"
+          className="text-orange-500 hover:text-orange-700 flex items-center text-sm"
         >
           <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
           Retour
@@ -239,62 +239,62 @@ export default function ReadBookPage() {
 
         <div className="text-center mx-4 flex-1 min-w-[200px]">
           <h1
-            className="text-xl font-bold line-clamp-1 text-black"
+            className="text-lg font-semibold line-clamp-1 text-black"
             title={book.title}
           >
             {book.title}
           </h1>
-          <p className="text-sm text-gray-600">par {book.author}</p>
+          <p className="text-xs text-gray-600">par {book.author}</p>
         </div>
 
         <button
           onClick={downloadBook}
-          className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 flex items-center"
+          className="bg-orange-500 text-white px-3 py-1.5 rounded-lg hover:bg-orange-600 flex items-center text-sm"
         >
-          <FontAwesomeIcon icon={faDownload} className="mr-2" />
+          <FontAwesomeIcon icon={faDownload} className="mr-1.5" />
           Télécharger
         </button>
       </div>
 
       {/* Contenu principal */}
-      <div className="container mx-auto px-4 py-8">
+      <div className="px-4 py-6">
         {!isReading ? (
-          <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">
+          <div className="max-w-4xl mx-auto bg-white rounded-lg p-6">
+            <div className="text-center mb-6">
+              <h2 className="text-xl font-bold text-gray-800 mb-2">
                 Prêt à lire{" "}
                 <span className="text-orange-500">{book.title}</span>?
               </h2>
-              <p className="text-gray-600">
+              <p className="text-gray-600 text-sm">
                 Cliquez sur le bouton ci-dessous pour commencer votre lecture
               </p>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-8 items-center">
+            <div className="flex flex-col md:flex-row gap-6 items-center">
               {book.coverUrl && (
-                <div className="flex-shrink-0">
+                <div className="flex-shrink-0 w-48 h-64 relative rounded-lg overflow-hidden shadow-md">
                   <Image
                     src={book.coverUrl}
                     alt={`Couverture de ${book.title}`}
-                    width={256}
-                    height={384}
-                    className="w-64 h-96 object-cover rounded-lg shadow-md"
-                    unoptimized
+                    fill
+                    className="object-cover"
                   />
                 </div>
               )}
 
               <div className="flex-1">
-                <div className="mb-6">
-                  <h3 className="text-xl font-semibold mb-4 text-black">
+                <div className="mb-4">
+                  <h3 className="text-lg font-semibold mb-2 text-black">
                     {book.title}
                   </h3>
-                  <p className="text-gray-700 mb-4">par {book.author}</p>
+                  <p className="text-gray-700 mb-3">par {book.author}</p>
                   {book.description && (
-                    <p className="text-gray-600 mb-6">{book.description}</p>
+                    <p className="text-gray-600 mb-4 text-sm">
+                      {book.description}
+                    </p>
                   )}
 
-                  <div className="flex gap-4 text-sm text-gray-500">
+                  <div className="flex gap-4 text-xs text-gray-500">
                     <div className="flex items-center">
                       <FontAwesomeIcon icon={faBook} className="mr-1" />
                       <span>{book.reads || 0} lectures</span>
@@ -311,104 +311,100 @@ export default function ReadBookPage() {
 
                 <button
                   onClick={() => setIsReading(true)}
-                  className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg w-full transition"
+                  className="bg-orange-500 hover:bg-orange-600 text-white font-medium py-2.5 px-5 rounded-lg w-full transition flex items-center justify-center gap-2"
                 >
-                  Commencer la lecture
+                  <FontAwesomeIcon icon={faPlay} />
+                  <span>Commencer la lecture</span>
                 </button>
               </div>
             </div>
           </div>
         ) : (
-          <div
-            ref={pdfContainerRef}
-            className="bg-white p-4 rounded-lg shadow-lg w-full max-w-4xl overflow-auto mx-auto"
-          >
+          <div ref={pdfContainerRef} className="w-full overflow-hidden">
+            {/* Barre de contrôle PDF */}
+            <div className="flex flex-wrap justify-center gap-2 mb-3 bg-gray-50 py-2 px-3 rounded-lg">
+              <button
+                onClick={zoomOut}
+                title="Zoom arrière"
+                className="bg-white text-gray-700 p-1.5 rounded-full hover:bg-gray-100 border"
+              >
+                <FontAwesomeIcon icon={faSearchMinus} className="w-3.5 h-3.5" />
+              </button>
+
+              <button
+                onClick={resetZoom}
+                className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded border"
+              >
+                {Math.round(scale * 100)}%
+              </button>
+
+              <button
+                onClick={zoomIn}
+                title="Zoom avant"
+                className="bg-white text-gray-700 p-1.5 rounded-full hover:bg-gray-100 border"
+              >
+                <FontAwesomeIcon icon={faSearchPlus} className="w-3.5 h-3.5" />
+              </button>
+
+              <button
+                onClick={toggleFullscreen}
+                title={
+                  isFullscreen ? "Quitter le plein écran" : "Mode plein écran"
+                }
+                className="bg-white text-gray-700 p-1.5 rounded-full hover:bg-gray-100 border"
+              >
+                <FontAwesomeIcon
+                  icon={isFullscreen ? faCompress : faExpand}
+                  className="w-3.5 h-3.5"
+                />
+              </button>
+
+              <button
+                onClick={() => setIsReading(false)}
+                className="bg-white text-gray-700 px-3 py-1 rounded-lg hover:bg-gray-100 border text-sm"
+              >
+                Retour aux détails
+              </button>
+            </div>
+
             {pdfError ? (
-              <div className="text-center py-12">
-                <h2 className="text-xl font-semibold text-gray-700 mb-4">
+              <div className="text-center py-8 bg-white rounded-lg">
+                <h2 className="text-lg font-semibold text-gray-700 mb-3">
                   Erreur de chargement du livre
                 </h2>
-                <p className="text-gray-600 mb-6 max-w-xl mx-auto">
+                <p className="text-gray-600 mb-5 max-w-xl mx-auto text-sm">
                   Impossible de charger le fichier PDF. Veuillez vérifier que le
                   lien est correct et que vous êtes connecté à internet.
                 </p>
-                <div className="flex flex-wrap justify-center gap-3">
+                <div className="flex flex-wrap justify-center gap-2">
                   <button
                     onClick={() => window.location.reload()}
-                    className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300"
+                    className="bg-gray-200 text-gray-800 px-3 py-1.5 rounded-lg hover:bg-gray-300 text-sm"
                   >
                     Réessayer
                   </button>
                   <button
                     onClick={() => setIsReading(false)}
-                    className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
+                    className="bg-orange-500 text-white px-3 py-1.5 rounded-lg hover:bg-orange-600 text-sm"
                   >
                     Retour aux détails
                   </button>
                 </div>
               </div>
             ) : (
-              <div className="w-full">
-                <div className="flex flex-wrap justify-center gap-3 mb-4">
-                  <button
-                    onClick={zoomOut}
-                    title="Zoom arrière"
-                    className="bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300"
-                  >
-                    <FontAwesomeIcon icon={faSearchMinus} />
-                  </button>
-
-                  <button
-                    onClick={resetZoom}
-                    className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded"
-                  >
-                    {Math.round(scale * 100)}%
-                  </button>
-
-                  <button
-                    onClick={zoomIn}
-                    title="Zoom avant"
-                    className="bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300"
-                  >
-                    <FontAwesomeIcon icon={faSearchPlus} />
-                  </button>
-
-                  <button
-                    onClick={toggleFullscreen}
-                    title={
-                      isFullscreen
-                        ? "Quitter le plein écran"
-                        : "Mode plein écran"
-                    }
-                    className="bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300"
-                  >
-                    <FontAwesomeIcon
-                      icon={isFullscreen ? faCompress : faExpand}
-                    />
-                  </button>
-
-                  <button
-                    onClick={() => setIsReading(false)}
-                    className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300"
-                  >
-                    Retour aux détails
-                  </button>
-                </div>
-
-                <div className="overflow-auto border rounded-lg">
-                  <iframe
-                    src={`${book.fileUrl}#view=fitH`}
-                    title={`Livre: ${book.title} - Aperçu PDF`}
-                    className="w-full min-h-[70vh]"
-                    style={{
-                      transform: `scale(${scale})`,
-                      transformOrigin: "0 0",
-                      width: `${100 / scale}%`,
-                      height: `${100 / scale}%`,
-                    }}
-                    onError={() => setPdfError(true)}
-                  />
-                </div>
+              <div className="w-full h-[calc(100vh-150px)] border rounded-lg bg-gray-50">
+                <iframe
+                  src={`${book.fileUrl}#view=fitH`}
+                  title={`Livre: ${book.title} - Aperçu PDF`}
+                  className="w-full h-full"
+                  style={{
+                    transform: `scale(${scale})`,
+                    transformOrigin: "0 0",
+                    width: `${100 / scale}%`,
+                    height: `${100 / scale}%`,
+                  }}
+                  onError={() => setPdfError(true)}
+                />
               </div>
             )}
           </div>

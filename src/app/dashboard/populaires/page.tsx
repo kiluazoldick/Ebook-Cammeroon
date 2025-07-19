@@ -12,6 +12,9 @@ import {
   faSearch,
   faFilter,
   faSpinner,
+  faBookOpen,
+  faEye,
+  faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { supabase } from "@/lib/supabase";
 
@@ -100,18 +103,20 @@ export default function PopularPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-800">
+    <div className="min-h-screen bg-white text-gray-800">
       {/* En-tête */}
       <header className="sticky top-0 bg-white shadow-sm z-10">
-        <div className="container mx-auto px-4 py-3">
+        <div className="container mx-auto px-4 py-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <Link
-              href="/dashboard/populaires"
-              className="text-orange-600 font-bold text-xl flex items-center"
-            >
-              <FontAwesomeIcon icon={faFire} className="mr-2" />
-              Livres Populaires
-            </Link>
+            <div className="flex items-center gap-2">
+              <FontAwesomeIcon
+                icon={faFire}
+                className="text-orange-500 text-xl"
+              />
+              <h1 className="text-xl font-bold text-orange-600">
+                Livres Populaires
+              </h1>
+            </div>
 
             <div className="relative w-full md:max-w-md">
               <input
@@ -130,18 +135,18 @@ export default function PopularPage() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-6">
         {/* Section titre et filtres */}
-        <div className="mb-8">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+        <div className="mb-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
             <div>
-              <p className="text-gray-600 mt-2">
+              <p className="text-gray-600">
                 Les histoires les plus lues et appréciées par la communauté
               </p>
             </div>
 
-            <div className="flex items-center space-x-3">
-              <div className="flex items-center bg-white border border-gray-300 rounded-lg px-3 py-2">
+            <div className="flex items-center w-full md:w-auto">
+              <div className="flex items-center bg-white border border-gray-300 rounded-lg px-3 py-2 w-full md:w-auto">
                 <FontAwesomeIcon
                   icon={faFilter}
                   className="text-gray-500 mr-2"
@@ -149,7 +154,7 @@ export default function PopularPage() {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-transparent focus:outline-none"
+                  className="bg-transparent focus:outline-none w-full"
                 >
                   <option value="reads">Plus lus</option>
                   <option value="likes">Plus aimés</option>
@@ -161,29 +166,29 @@ export default function PopularPage() {
           </div>
 
           {/* Statistiques globales */}
-          <div className="bg-gradient-to-r from-orange-500 to-yellow-400 rounded-xl p-6 text-white mb-8">
-            <div className="flex flex-col sm:flex-row justify-between gap-4 text-center">
-              <div>
-                <p className="text-3xl font-bold">
+          <div className="bg-gradient-to-r from-orange-500 to-yellow-400 rounded-xl p-5 text-white mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+              <div className="bg-white/20 rounded-lg p-3">
+                <p className="text-2xl font-bold">
                   {books
                     .reduce((sum, book) => sum + book.reads, 0)
                     .toLocaleString()}
                   +
                 </p>
-                <p>Lectures totales</p>
+                <p className="text-sm">Lectures totales</p>
               </div>
-              <div>
-                <p className="text-3xl font-bold">
+              <div className="bg-white/20 rounded-lg p-3">
+                <p className="text-2xl font-bold">
                   {books
                     .reduce((sum, book) => sum + book.likes, 0)
                     .toLocaleString()}
                   +
                 </p>
-                <p>J&apos;aime total</p>
+                <p className="text-sm">J&apos;aime total</p>
               </div>
-              <div>
-                <p className="text-3xl font-bold">{books.length}</p>
-                <p>Livres disponibles</p>
+              <div className="bg-white/20 rounded-lg p-3">
+                <p className="text-2xl font-bold">{books.length}</p>
+                <p className="text-sm">Livres disponibles</p>
               </div>
             </div>
           </div>
@@ -217,8 +222,7 @@ export default function PopularPage() {
           } else {
             content = (
               <>
-                {/* MODIFICATION PRINCIPALE ICI */}
-                <div className="flex flex-wrap justify-center gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                   {books.map((book) => (
                     <BookCard
                       key={book.id}
@@ -227,6 +231,14 @@ export default function PopularPage() {
                       onLike={() => updateLikes(book.id)}
                     />
                   ))}
+                </div>
+
+                {/* Bouton Voir plus */}
+                <div className="mt-8 text-center">
+                  <button className="bg-orange-50 text-orange-600 font-medium px-6 py-3 rounded-full hover:bg-orange-100 transition flex items-center gap-2 mx-auto">
+                    Voir plus de livres{" "}
+                    <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
+                  </button>
                 </div>
               </>
             );
@@ -238,7 +250,7 @@ export default function PopularPage() {
   );
 }
 
-// Composant BookCard - MODIFICATIONS RESPONSIVES ICI
+// Composant BookCard amélioré
 const BookCard = ({
   book,
   onRead,
@@ -258,9 +270,9 @@ const BookCard = ({
   };
 
   return (
-    <div className="bg-white rounded-xl w-full max-w-[350px] sm:max-w-none sm:w-[calc(50%-20px)] lg:w-[calc(50%-24px)] shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all flex flex-col h-full">
       {/* Couverture du livre */}
-      <div className="h-48 relative">
+      <div className="relative h-48">
         {book.coverUrl ? (
           <Image
             src={book.coverUrl}
@@ -280,13 +292,11 @@ const BookCard = ({
 
       {/* Détails du livre */}
       <div className="p-4 flex flex-col flex-grow">
-        <div className="flex justify-between items-start mb-2">
-          <div>
-            <h3 className="font-bold text-lg text-gray-800 line-clamp-1">
-              {book.title}
-            </h3>
-            <p className="text-sm text-gray-600">Par {book.author}</p>
-          </div>
+        <div className="mb-2">
+          <h3 className="font-bold text-gray-800 line-clamp-1 text-lg">
+            {book.title}
+          </h3>
+          <p className="text-sm text-gray-600 mt-1">Par {book.author}</p>
         </div>
 
         <p className="text-sm text-gray-700 mb-3 line-clamp-2 flex-grow">
@@ -294,19 +304,23 @@ const BookCard = ({
         </p>
 
         {/* Stats du livre */}
-        <div className="flex justify-between items-center text-sm text-gray-600 mb-3">
+        <div className="flex justify-between items-center text-xs text-gray-600 mb-4">
           <div className="flex items-center">
             <FontAwesomeIcon icon={faStar} className="text-yellow-500 mr-1" />
             <span>{book.rating.toFixed(1)}</span>
           </div>
           <div className="flex items-center">
-            <FontAwesomeIcon icon={faBook} className="text-blue-500 mr-1" />
+            <FontAwesomeIcon icon={faEye} className="text-blue-500 mr-1" />
             <span>{book.reads.toLocaleString()} lectures</span>
+          </div>
+          <div className="flex items-center">
+            <FontAwesomeIcon icon={faHeart} className="text-red-500 mr-1" />
+            <span>{book.likes.toLocaleString()} j&apos;aime</span>
           </div>
         </div>
 
         {/* Boutons d'action */}
-        <div className="flex justify-between gap-2">
+        <div className="flex gap-3">
           <button
             onClick={handleLike}
             className={`flex-1 py-2 rounded-lg flex items-center justify-center ${
@@ -320,9 +334,7 @@ const BookCard = ({
               icon={faHeart}
               className={isLiked ? "text-red-500" : ""}
             />
-            <span className="ml-2">
-              {isLiked ? "Aimé" : `J'aime (${book.likes})`}
-            </span>
+            <span className="ml-2">{isLiked ? "Aimé" : "J'aime"}</span>
           </button>
 
           <Link
@@ -330,8 +342,9 @@ const BookCard = ({
             className="flex-1"
             onClick={onRead}
           >
-            <button className="w-full py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition">
-              Lire
+            <button className="w-full py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition flex items-center justify-center gap-2">
+              <FontAwesomeIcon icon={faBookOpen} />
+              <span>Lire</span>
             </button>
           </Link>
         </div>

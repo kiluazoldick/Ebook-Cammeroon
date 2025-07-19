@@ -1,4 +1,3 @@
-// app/dashboard/auteur/[id]/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -10,6 +9,8 @@ import {
   faStar,
   faArrowLeft,
   faHeart,
+  faBookOpen,
+  faEye,
 } from "@fortawesome/free-solid-svg-icons";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
@@ -124,102 +125,101 @@ export default function AuteurDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-800">
-      <header className="sticky top-0 bg-white shadow-sm z-10">
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex items-center">
-            <Link href="/dashboard/auteurs" className="text-orange-600 mr-4">
-              <FontAwesomeIcon icon={faArrowLeft} />
-            </Link>
-            <h1 className="text-orange-600 font-bold text-xl flex items-center">
-              <FontAwesomeIcon icon={faUser} className="mr-2" />
-              {auteur?.nom ?? "Chargement..."}
-            </h1>
-          </div>
+    <div className="min-h-screen bg-white">
+      {/* En-tête compact */}
+      <div className="border-b py-3 px-4">
+        <div className="flex items-center">
+          <Link href="/dashboard/auteurs" className="text-orange-500 mr-3">
+            <FontAwesomeIcon icon={faArrowLeft} />
+          </Link>
+          <h1 className="text-gray-800 font-semibold text-lg flex items-center">
+            <FontAwesomeIcon icon={faUser} className="mr-2 text-orange-500" />
+            {auteur?.nom ?? "Chargement..."}
+          </h1>
         </div>
-      </header>
+      </div>
 
-      <main className="container mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-12">
-          <div className="w-48 h-48 rounded-full overflow-hidden bg-gradient-to-br from-orange-100 to-yellow-50 flex-shrink-0">
+      <main className="px-4 py-6">
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8">
+          <div className="w-32 h-32 rounded-full overflow-hidden bg-gradient-to-br from-orange-100 to-yellow-50 flex-shrink-0">
             {auteur?.photoUrl ? (
               <Image
                 src={auteur.photoUrl}
                 alt={`Photo de ${auteur.nom}`}
-                width={192}
-                height={192}
+                width={128}
+                height={128}
                 className="object-cover w-full h-full"
               />
             ) : (
               <div className="w-full h-full bg-gradient-to-br from-orange-400 to-yellow-300 flex items-center justify-center">
                 <FontAwesomeIcon
                   icon={faUser}
-                  className="text-white text-5xl"
+                  className="text-white text-3xl"
                 />
               </div>
             )}
           </div>
 
           <div className="flex-grow">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+            <h2 className="text-lg font-semibold text-gray-800 mb-2">
               Biographie
             </h2>
-            <p className="text-gray-700">
+            <p className="text-gray-700 text-sm">
               {auteur?.biographie ??
                 "Aucune biographie disponible pour cet auteur."}
             </p>
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-orange-500 to-yellow-400 rounded-xl p-6 text-white mb-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-            <div className="p-4 bg-white/20 rounded-lg">
-              <p className="text-3xl font-bold">{stats.nombre_livres}</p>
-              <p>Livres</p>
+        <div className="bg-gradient-to-r from-orange-500 to-yellow-400 rounded-xl p-4 text-white mb-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+            <div className="bg-white/20 rounded-lg p-3">
+              <p className="text-xl font-bold">{stats.nombre_livres}</p>
+              <p className="text-xs">Livres</p>
             </div>
-            <div className="p-4 bg-white/20 rounded-lg">
-              <p className="text-3xl font-bold">
+            <div className="bg-white/20 rounded-lg p-3">
+              <p className="text-xl font-bold">
                 {stats.total_lectures.toLocaleString()}
               </p>
-              <p>Lectures</p>
+              <p className="text-xs">Lectures</p>
             </div>
-            <div className="p-4 bg-white/20 rounded-lg">
-              <p className="text-3xl font-bold">
+            <div className="bg-white/20 rounded-lg p-3">
+              <p className="text-xl font-bold">
                 {stats.note_moyenne.toFixed(1)}
               </p>
-              <p>Note moyenne</p>
+              <p className="text-xs">Note moyenne</p>
             </div>
-            <div className="p-4 bg-white/20 rounded-lg">
-              <p className="text-3xl font-bold">
+            <div className="bg-white/20 rounded-lg p-3">
+              <p className="text-xl font-bold">
                 {stats.total_likes.toLocaleString()}
               </p>
-              <p>J&apos;aime</p>
+              <p className="text-xs">J&apos;aime</p>
             </div>
           </div>
         </div>
 
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">
+        <h2 className="text-lg font-semibold text-gray-800 mb-4">
           Livres de {auteur?.nom}
         </h2>
 
         {(() => {
           if (loading) {
             return (
-              <div className="flex justify-center items-center h-64">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
+              <div className="flex justify-center items-center h-40">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-orange-500"></div>
               </div>
             );
           } else if (livres.length === 0) {
             return (
-              <div className="text-center py-12">
-                <p className="text-gray-500">
+              <div className="text-center py-6">
+                <p className="text-gray-500 text-sm">
                   Aucun livre trouvé pour cet auteur
                 </p>
               </div>
             );
           } else {
             return (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {livres.map((livre) => (
                   <LivreCard
                     key={livre.id}
@@ -256,8 +256,8 @@ const LivreCard = ({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col">
-      <div className="h-48 relative">
+    <div className="bg-white border rounded-lg overflow-hidden hover:shadow-md transition-all flex flex-col h-full">
+      <div className="h-40 relative">
         {livre.coverUrl ? (
           <Image
             src={livre.coverUrl}
@@ -268,31 +268,31 @@ const LivreCard = ({
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-orange-400 to-yellow-300 flex items-center justify-center">
-            <FontAwesomeIcon icon={faBook} className="text-white text-4xl" />
+            <FontAwesomeIcon icon={faBook} className="text-white text-3xl" />
           </div>
         )}
       </div>
 
-      <div className="p-4 flex flex-col flex-grow">
-        <div className="mb-3">
-          <h3 className="font-bold text-lg text-gray-800 line-clamp-1">
+      <div className="p-3 flex flex-col flex-grow">
+        <div className="mb-2">
+          <h3 className="font-semibold text-gray-800 line-clamp-1 text-base">
             {livre.title}
           </h3>
-          <p className="text-sm text-gray-600">Catégorie: {livre.category}</p>
+          <p className="text-xs text-gray-600">Catégorie: {livre.category}</p>
         </div>
 
-        <p className="text-sm text-gray-700 mb-4 line-clamp-2 flex-grow">
+        <p className="text-xs text-gray-700 mb-3 line-clamp-2 flex-grow">
           {livre.description}
         </p>
 
-        <div className="flex justify-between items-center text-sm text-gray-600 mb-4">
+        <div className="flex justify-between items-center text-xs text-gray-600 mb-3">
           <div className="flex items-center">
             <FontAwesomeIcon icon={faStar} className="text-yellow-500 mr-1" />
             <span>{livre.rating.toFixed(1)}</span>
           </div>
           <div className="flex items-center">
-            <FontAwesomeIcon icon={faBook} className="text-orange-500 mr-1" />
-            <span>{livre.reads.toLocaleString()} lectures</span>
+            <FontAwesomeIcon icon={faEye} className="text-blue-500 mr-1" />
+            <span>{livre.reads.toLocaleString()}</span>
           </div>
           <div className="flex items-center">
             <FontAwesomeIcon icon={faHeart} className="text-red-500 mr-1" />
@@ -300,21 +300,21 @@ const LivreCard = ({
           </div>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex gap-2">
           <button
             onClick={handleLike}
-            className={`flex-1 py-2 rounded-lg flex items-center justify-center transition ${
+            className={`flex-1 py-1.5 rounded-lg flex items-center justify-center text-xs ${
               isLiked
-                ? "bg-red-100 text-red-600"
+                ? "bg-red-50 text-red-500"
                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
             }`}
             disabled={isLiked}
           >
             <FontAwesomeIcon
               icon={faHeart}
-              className={isLiked ? "text-red-600" : ""}
+              className={isLiked ? "text-red-500" : ""}
             />
-            <span className="ml-2">{isLiked ? "Aimé" : "J'aime"}</span>
+            <span className="ml-1">{isLiked ? "Aimé" : "J'aime"}</span>
           </button>
 
           <Link
@@ -322,8 +322,9 @@ const LivreCard = ({
             className="flex-1"
             onClick={onRead}
           >
-            <button className="w-full py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition">
-              Lire
+            <button className="w-full py-1.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition flex items-center justify-center text-xs">
+              <FontAwesomeIcon icon={faBookOpen} className="mr-1" />
+              <span>Lire</span>
             </button>
           </Link>
         </div>

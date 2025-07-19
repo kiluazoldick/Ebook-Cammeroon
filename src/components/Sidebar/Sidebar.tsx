@@ -45,17 +45,21 @@ export default function Sidebar() {
 
       {/* Overlay */}
       {isOpen && (
-        <div
+        <button
+          type="button"
+          aria-label="Fermer le menu latéral"
           onClick={() => setIsOpen(false)}
           className="lg:hidden fixed inset-0 bg-black/50 z-40"
-        ></div>
+          style={{ cursor: "pointer" }}
+          tabIndex={0}
+        ></button>
       )}
 
       {/* Sidebar */}
       <div
-        className={`fixed h-full w-64 bg-[#fff9f4] shadow-lg p-4 border-r border-gray-100
+        className={`fixed h-full w-64 bg-[#fff9f4]  p-4 border-r border-gray-100
         transform transition-transform duration-300 ease-in-out
-        lg:translate-x-0 z-40
+        lg:translate-x-0
         ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         <div className="h-full flex flex-col">
