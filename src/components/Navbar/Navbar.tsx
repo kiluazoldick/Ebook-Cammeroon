@@ -35,7 +35,7 @@ export default function Navbar() {
                 className="text-orange-600 text-2xl mr-2"
               />
               <span className="text-xl font-bold text-orange-600">
-                <Link href="#marketing" onClick={closeMenu}>
+                <Link href="/" onClick={closeMenu}>
                   Ebook Cameroun
                 </Link>
               </span>
@@ -44,16 +44,16 @@ export default function Navbar() {
 
           {/* Liens desktop */}
           <div className="hidden md:ml-6 md:flex md:items-center md:space-x-8">
-            <NavLink href="#features" onClick={closeMenu}>
+            <NavLink href="/marketing/avantages" onClick={closeMenu}>
               Avantages
             </NavLink>
-            <NavLink href="#how-it-works" onClick={closeMenu}>
+            <NavLink href="/marketing/comment-ca-marche" onClick={closeMenu}>
               Comment ça marche
             </NavLink>
-            <NavLink href="#pricing" onClick={closeMenu}>
+            <NavLink href="/marketing/tarifs" onClick={closeMenu}>
               Tarifs
             </NavLink>
-            <NavLink href="#testimonials" onClick={closeMenu}>
+            <NavLink href="/marketing/avis" onClick={closeMenu}>
               Avis clients
             </NavLink>
           </div>
@@ -87,16 +87,19 @@ export default function Navbar() {
         }`}
       >
         <div className="px-2 pt-2 pb-4 space-y-1 sm:px-3 bg-white shadow-lg">
-          <MobileNavLink href="#features" onClick={closeMenu}>
+          <MobileNavLink href="/marketing/avantages" onClick={closeMenu}>
             Avantages
           </MobileNavLink>
-          <MobileNavLink href="#how-it-works" onClick={closeMenu}>
+          <MobileNavLink
+            href="/marketing/comment-ca-marche"
+            onClick={closeMenu}
+          >
             Comment ça marche
           </MobileNavLink>
-          <MobileNavLink href="#pricing" onClick={closeMenu}>
+          <MobileNavLink href="/marketing/tarifs" onClick={closeMenu}>
             Tarifs
           </MobileNavLink>
-          <MobileNavLink href="#testimonials" onClick={closeMenu}>
+          <MobileNavLink href="/marketing/avis" onClick={closeMenu}>
             Avis clients
           </MobileNavLink>
           <div className="mt-4">

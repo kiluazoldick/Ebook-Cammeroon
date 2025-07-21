@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Providers } from "../providers";
 import "../styles/globals.css";
+import ScrollToTop from "@/components/ScrollToTop/page"; // Chemin vers le nouveau composant
 
 export const metadata: Metadata = {
   title: "EbookCameroun",
@@ -13,5 +14,10 @@ export default function MarketingLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <Providers>{children}</Providers>;
+  return (
+    <Providers>
+      {children}
+      <ScrollToTop />
+    </Providers>
+  );
 }

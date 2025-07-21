@@ -23,6 +23,7 @@
     "bcryptjs": "^3.0.2",
     "corrige-tes-cours": "file:",
     "ebook-cameroo": "file:",
+    "framer-motion": "^12.23.6",
     "mongoose": "^8.15.0",
     "next": "15.3.2",
     "pdfjs-dist": "^3.4.120",
