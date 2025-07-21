@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   description:
     "Votre plateforme de streaming de livres camerounais. Découvrez, écoutez et lisez des milliers de livres audio et ebooks.",
   icons: {
-    icon: "/favicon.svg",
+    icon: "/logo-orange.svg",
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
