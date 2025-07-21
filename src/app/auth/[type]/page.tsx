@@ -37,7 +37,7 @@ export default function LoginPage() {
       <div className="hidden lg:block w-1/2 bg-orange-600 p-12 text-white">
         <div className="flex items-center mb-8">
           <Link href="/" className="flex items-center mb-8 lg:mb-12 group">
-            <Image src="/logo.png" alt="Logo" width={40} height={40} />
+            <Image src="/logo-blanc.svg" alt="Logo" width={40} height={40} />
             <span className="ml-3 text-2xl font-bold">Ebook Cameroon</span>
           </Link>
         </div>

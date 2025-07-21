@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGraduationCap } from "@fortawesome/free-solid-svg-icons";
+import { faBookOpen } from "@fortawesome/free-solid-svg-icons";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export default function ForgotPasswordPage() {
@@ -46,27 +46,27 @@ export default function ForgotPasswordPage() {
       <div className="hidden lg:flex w-1/2 p-12 flex-col justify-center bg-orange-900 bg-opacity-90">
         <Link href="/" className="flex items-center mb-12">
           <FontAwesomeIcon
-            icon={faGraduationCap}
-            className="text-4xl mr-3 text-orange-300"
+            icon={faBookOpen}
+            className="text-4xl mr-3 text-white"
           />
-          <span className="text-3xl font-extrabold text-orange-300">
+          <span className="text-3xl font-extrabold text-white">
             Ebook Cameroun
           </span>
         </Link>
 
-        <h2 className="text-4xl font-bold mb-6 text-orange-200">
+        <h2 className="text-4xl font-bold mb-6 text-white">
           Mot de passe oublié ?
         </h2>
-        <p className="text-orange-300 mb-8 max-w-lg leading-relaxed">
+        <p className="text-white mb-8 max-w-lg leading-relaxed">
           Pas de panique ! Indiquez votre adresse email liée à votre compte,
           nous vous enverrons un lien pour réinitialiser votre mot de passe.
         </p>
-        <ul className="space-y-4 text-orange-200 list-disc list-inside">
+        <ul className="space-y-4 text-white list-disc list-inside">
           <li>Simple et sécurisé</li>
           <li>Réinitialisation rapide</li>
           <li>Accès à vos ebooks et ressources en quelques clics</li>
         </ul>
-        <p className="mt-auto text-orange-400 text-xs">
+        <p className="mt-auto text-white text-xs">
           © {new Date().getFullYear()} Ebook Cameroun. Tous droits réservés.
         </p>
       </div>
@@ -76,7 +76,7 @@ export default function ForgotPasswordPage() {
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
             <FontAwesomeIcon
-              icon={faGraduationCap}
+              icon={faBookOpen}
               className="text-orange-600 text-5xl mb-4 lg:hidden"
             />
             <h1 className="text-3xl font-bold mb-2 text-gray-900">

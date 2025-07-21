@@ -70,7 +70,7 @@ export default function RegisterPage() {
         <div className="mb-10">
           <Link href="/" className="flex items-center mb-10">
             <Image
-              src="/logo.png"
+              src="/logo-blanc.svg"
               alt="Ebook Cameroon"
               width={48}
               height={48}
