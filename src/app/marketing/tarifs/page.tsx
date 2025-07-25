@@ -28,7 +28,7 @@ const plans: PlanType[] = [
   },
   {
     name: "Pro",
-    price: "4 000 FCFA/mois",
+    price: "1 000 FCFA/mois",
     description: "Idéal pour les lecteurs réguliers et curieux.",
     features: [
       "Accès illimité à tous les ebooks",
@@ -41,7 +41,7 @@ const plans: PlanType[] = [
   },
   {
     name: "Premium",
-    price: "7 000 FCFA/mois",
+    price: "2 000 FCFA/mois",
     description: "Pour les passionnés et les créateurs.",
     features: [
       "Toutes les fonctionnalités Pro",

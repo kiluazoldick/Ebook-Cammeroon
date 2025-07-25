@@ -16,7 +16,7 @@ const pricingPlans = [
   },
   {
     name: "Pro",
-    price: "4 000 FCFA/mois",
+    price: "1 000 FCFA/mois",
     description: "Accès complet à la bibliothèque et téléchargement illimité.",
     features: [
       "Accès à toute la bibliothèque Ebook Cameroun",
@@ -27,7 +27,7 @@ const pricingPlans = [
   },
   {
     name: "Premium",
-    price: "7 000 FCFA/mois",
+    price: "2 000 FCFA/mois",
     description:
       "Toutes les fonctionnalités Pro + accès aux webinaires exclusifs.",
     features: [
