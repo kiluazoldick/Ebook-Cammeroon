@@ -20,6 +20,7 @@
     "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.50.2",
     "autoprefixer": "^10.4.21",
+    "axios": "^1.11.0",
     "bcryptjs": "^3.0.2",
     "corrige-tes-cours": "file:",
     "ebook-cameroo": "file:",
@@ -33,7 +34,8 @@
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.2",
     "react-icons": "^5.5.0",
-    "react-pdf": "^10.0.1"
+    "react-pdf": "^10.0.1",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

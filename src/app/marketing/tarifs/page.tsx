@@ -1,9 +1,19 @@
+"use client";
+
 import Head from "next/head";
-import Link from "next/link";
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 
-const plans = [
+type PlanType = {
+  name: string;
+  price: string;
+  description: string;
+  features: string[];
+  cta: string;
+  highlighted: boolean;
+};
+
+const plans: PlanType[] = [
   {
     name: "Basique",
     price: "Gratuit",
@@ -45,18 +55,8 @@ const plans = [
 ];
 
 const featuresCompare = [
-  {
-    label: "Ebooks gratuits",
-    basique: true,
-    pro: true,
-    premium: true,
-  },
-  {
-    label: "Lecture hors-ligne",
-    basique: false,
-    pro: true,
-    premium: true,
-  },
+  { label: "Ebooks gratuits", basique: true, pro: true, premium: true },
+  { label: "Lecture hors-ligne", basique: false, pro: true, premium: true },
   {
     label: "Recommandations personnalisées",
     basique: false,
@@ -69,19 +69,38 @@ const featuresCompare = [
     pro: true,
     premium: true,
   },
-  {
-    label: "Webinaires exclusifs",
-    basique: false,
-    pro: false,
-    premium: true,
-  },
-  {
-    label: "Support téléphonique",
-    basique: false,
-    pro: false,
-    premium: true,
-  },
+  { label: "Webinaires exclusifs", basique: false, pro: false, premium: true },
+  { label: "Support téléphonique", basique: false, pro: false, premium: true },
 ];
+
+const handleSubscription = async (plan: PlanType) => {
+  if (plan.price === "Gratuit") {
+    window.location.href = "/auth/connexion";
+  } else {
+    const amount = plan.name === "Pro" ? 1000 : 2000;
+
+    try {
+      const res = await fetch("/api/payments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ amount, plan: plan.name }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        window.location.href = data.link;
+      } else {
+        console.error("Erreur côté serveur:", data.error);
+        alert("Erreur : " + data.error);
+      }
+    } catch (error) {
+      console.error("Erreur inattendue :", error);
+      alert("Une erreur est survenue.");
+    }
+  }
+};
 
 export default function Tarifs() {
   return (
@@ -150,11 +169,12 @@ export default function Tarifs() {
                     </li>
                   ))}
                 </ul>
-                <Link href="/auth/connexion">
-                  <button className="mt-8 w-full py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-md transition">
-                    {plan.cta}
-                  </button>
-                </Link>
+                <button
+                  onClick={() => handleSubscription(plan)}
+                  className="mt-8 w-full py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-md transition"
+                >
+                  {plan.cta}
+                </button>
               </div>
             ))}
           </section>
