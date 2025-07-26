@@ -40,7 +40,7 @@ export default function RegisterPage() {
         emailRedirectTo:
           process.env.NODE_ENV === "development"
             ? "http://localhost:3000/dashboard"
-            : "https://ebookcameroon.vercel.app/dashboard",
+            : "https://ebookcameroun.com/dashboard",
         data: {
           full_name: fullName,
         },
@@ -73,7 +73,7 @@ export default function RegisterPage() {
         redirectTo:
           process.env.NODE_ENV === "development"
             ? "http://localhost:3000/dashboard"
-            : "https://ebookcameroon.vercel.app/dashboard",
+            : "https://ebookcameroun.com/dashboard",
         queryParams: {
           access_type: "offline",
           prompt: "consent",
