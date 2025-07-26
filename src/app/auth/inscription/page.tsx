@@ -13,6 +13,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
@@ -22,7 +23,7 @@ export default function RegisterPage() {
     setSuccessMsg("");
 
     if (!termsAccepted) {
-      setError("Vous devez accepter les conditions d’utilisation.");
+      setError("Vous devez accepter les conditions d'utilisation.");
       return;
     }
 
@@ -58,8 +59,31 @@ export default function RegisterPage() {
       setEmail("");
       setPassword("");
       setTermsAccepted(false);
-      // Optionnel : rediriger après un délai
       setTimeout(() => router.push("/auth/connexion"), 5000);
+    }
+  };
+
+  const handleGoogleSignUp = async () => {
+    setError("");
+    setGoogleLoading(true);
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo:
+          process.env.NODE_ENV === "development"
+            ? "http://localhost:3000/dashboard"
+            : "https://ebookcameroon.vercel.app/dashboard",
+        queryParams: {
+          access_type: "offline",
+          prompt: "consent",
+        },
+      },
+    });
+
+    if (error) {
+      setError(`Erreur Google: ${error.message}`);
+      setGoogleLoading(false);
     }
   };
 
@@ -117,6 +141,35 @@ export default function RegisterPage() {
                 Connectez-vous ici
               </Link>
             </p>
+          </div>
+
+          <button
+            onClick={handleGoogleSignUp}
+            disabled={loading || googleLoading}
+            className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 py-3 rounded-md font-semibold hover:bg-gray-50 transition-colors disabled:opacity-50"
+          >
+            {googleLoading ? (
+              <span>Connexion en cours...</span>
+            ) : (
+              <>
+                <Image
+                  src="/google-logo.svg"
+                  alt="Google"
+                  width={24}
+                  height={24}
+                />
+                <span>S&apos;inscrire avec Google</span>
+              </>
+            )}
+          </button>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-gray-500">ou</span>
+            </div>
           </div>
 
           <form onSubmit={handleRegister} className="space-y-5">
@@ -204,22 +257,22 @@ export default function RegisterPage() {
                 required
               />
               <label htmlFor="terms" className="ml-3 text-sm text-gray-700">
-                J’accepte les{" "}
+                J&apos;accepte les{" "}
                 <Link
                   href="/conditions"
                   className="text-orange-600 hover:underline font-medium"
                 >
-                  conditions d’utilisation
+                  conditions d&apos;utilisation
                 </Link>
               </label>
             </div>
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || googleLoading}
               className="w-full bg-orange-600 text-white py-3 rounded-md font-semibold hover:bg-orange-700 transition-colors disabled:opacity-50"
             >
-              {loading ? "Inscription en cours..." : "S’inscrire gratuitement"}
+              {loading ? "Inscription en cours..." : "S'inscrire gratuitement"}
             </button>
           </form>
         </div>

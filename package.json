@@ -19,6 +19,7 @@
     "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.50.2",
+    "@types/google-one-tap": "^1.2.6",
     "autoprefixer": "^10.4.21",
     "axios": "^1.11.0",
     "bcryptjs": "^3.0.2",

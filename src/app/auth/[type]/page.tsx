@@ -9,6 +9,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
 
@@ -31,6 +32,30 @@ export default function LoginPage() {
     setLoading(false);
   };
 
+  const handleGoogleLogin = async () => {
+    setError("");
+    setGoogleLoading(true);
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo:
+          process.env.NODE_ENV === "development"
+            ? "http://localhost:3000/dashboard"
+            : "https://ebookcameroon.vercel.app/dashboard",
+        queryParams: {
+          access_type: "offline",
+          prompt: "consent",
+        },
+      },
+    });
+
+    if (error) {
+      setError(`Erreur Google: ${error.message}`);
+      setGoogleLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex font-sans">
       {/* Sidebar */}
@@ -47,7 +72,7 @@ export default function LoginPage() {
             Votre bibliothèque numérique personnelle
           </h2>
           <p className="text-orange-100 mb-6">
-            Accédez à des livres, fiches et supports d apprentissage à tout
+            Accédez à des livres, fiches et supports d&apos;apprentissage à tout
             moment.
           </p>
           <ul className="space-y-4 mb-8 text-sm">
@@ -78,13 +103,44 @@ export default function LoginPage() {
                 href="/auth/inscription"
                 className="text-orange-600 font-semibold"
               >
-                S’inscrire
+                S&apos;inscrire
               </Link>
             </p>
           </div>
 
+          <button
+            onClick={handleGoogleLogin}
+            disabled={loading || googleLoading}
+            className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 py-3.5 px-6 rounded-xl font-medium hover:bg-gray-50 transition-colors disabled:opacity-50"
+          >
+            {googleLoading ? (
+              <span>Connexion en cours...</span>
+            ) : (
+              <>
+                <Image
+                  src="/google-logo.svg"
+                  alt="Google"
+                  width={20}
+                  height={20}
+                />
+                <span>Se connecter avec Google</span>
+              </>
+            )}
+          </button>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-gray-500">ou</span>
+            </div>
+          </div>
+
           <form onSubmit={handleLogin} className="space-y-5">
-            {error && <p className="text-red-600 text-sm">{error}</p>}
+            {error && (
+              <p className="text-red-600 text-sm text-center">{error}</p>
+            )}
 
             <div>
               <label
@@ -134,7 +190,7 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || googleLoading}
               className="w-full bg-orange-600 text-white py-3.5 px-6 rounded-xl
              font-medium hover:bg-orange-700 transition-colors"
             >
