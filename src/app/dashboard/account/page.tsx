@@ -11,12 +11,16 @@ import {
   FiSave,
   FiEdit,
   FiLoader,
+  FiStar,
+  FiCheckCircle,
+  FiXCircle,
 } from "react-icons/fi";
 
 type UserProfile = {
   id: string;
   email: string | null;
   full_name?: string | null;
+  subscription_status?: string | null;
 };
 
 export default function ComptePage() {
@@ -81,6 +85,30 @@ export default function ComptePage() {
     window.location.href = "/";
   };
 
+  const handleUpgrade = async (plan: string) => {
+    try {
+      const amount = plan === "Pro" ? 1000 : 2000;
+      
+      const res = await fetch("/api/payments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ amount, plan }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        window.location.href = data.link;
+      } else {
+        toast.error("Erreur : " + data.error);
+      }
+    } catch (error) {
+      console.error("Erreur inattendue :", error);
+      toast.error("Une erreur est survenue");
+    }
+  };
+
   const getInitials = (name: string | null | undefined) => {
     if (!name) return "?";
     return name
@@ -118,6 +146,8 @@ export default function ComptePage() {
     );
   }
 
+  const isPremium = user.subscription_status === "active";
+
   return (
     <div className="min-h-screen bg-white py-4 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
       <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
@@ -127,6 +157,64 @@ export default function ComptePage() {
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
             Mon Compte
           </h1>
+        </div>
+
+        {/* Section Abonnement */}
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-8">
+          <div className="p-6 sm:p-8">
+            <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-4">
+              <FiStar className={isPremium ? "text-yellow-500" : "text-gray-400"} />
+              Votre abonnement
+            </h3>
+
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div>
+                <p className="text-gray-900 font-medium">
+                  {isPremium ? "Abonnement Premium" : "Version Gratuite"}
+                </p>
+                <p className="text-sm text-gray-600 mt-1">
+                  {isPremium
+                    ? "Vous bénéficiez de tous les avantages Premium"
+                    : "Accès limité aux fonctionnalités"}
+                </p>
+              </div>
+
+              {isPremium ? (
+                <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                  Actif
+                </span>
+              ) : (
+                <button
+                  onClick={() => handleUpgrade("Pro")}
+                  className="bg-orange-600 hover:bg-orange-700 text-white font-medium px-4 py-2 rounded-lg transition"
+                >
+                  Passer à Premium
+                </button>
+              )}
+            </div>
+
+            {!isPremium && (
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <h4 className="text-sm font-medium text-gray-900 mb-3">
+                  Avantages Premium :
+                </h4>
+                <ul className="space-y-2 text-sm text-gray-700">
+                  <li className="flex items-center gap-2">
+                    <FiCheckCircle className="text-green-500" />
+                    Accès illimité à tous les ebooks
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <FiCheckCircle className="text-green-500" />
+                    Téléchargement hors-ligne
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <FiCheckCircle className="text-green-500" />
+                    Recommandations personnalisées
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Section Profil */}
@@ -260,6 +348,16 @@ export default function ComptePage() {
             </h3>
 
             <div className="space-y-4">
+              {isPremium && (
+                <button
+                  onClick={() => window.location.href = "/tarifs"}
+                  className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-lg font-medium text-orange-600 hover:bg-orange-50 border border-orange-200 transition"
+                >
+                  <FiStar className="text-orange-500" />
+                  Gérer mon abonnement
+                </button>
+              )}
+              
               <button
                 onClick={signOut}
                 className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-lg font-medium text-red-600 hover:bg-red-50 border border-red-200 transition"
