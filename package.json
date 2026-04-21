@@ -27,7 +27,7 @@
     "ebook-cameroo": "file:",
     "framer-motion": "^12.23.6",
     "mongoose": "^8.15.0",
-    "next": "15.3.2",
+    "next": "15.3.8",
     "pdfjs-dist": "^3.4.120",
     "postcss": "^8.5.3",
     "prisma": "^6.11.0",
